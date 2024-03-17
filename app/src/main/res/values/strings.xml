@@ -51,11 +51,16 @@
     <string name="notify_school_s_educators">Notify School\'s Educators</string>
     <string name="gender">Gender</string>
     <string name="re_type_password">Re-type Password</string>
+    <string name="select_status">Select Status</string>
 
     <string-array name="gender_options">
         <item>Male</item>
         <item>Female</item>
-        <item>Lasin</item>
+    </string-array>
+
+    <string-array name="status_options">
+        <item>Student</item>
+        <item>Teacher</item>
     </string-array>
 
 </resources>

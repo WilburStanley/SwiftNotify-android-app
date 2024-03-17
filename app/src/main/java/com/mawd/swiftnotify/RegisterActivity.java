@@ -21,7 +21,7 @@ import java.util.Objects;
 public class RegisterActivity extends AppCompatActivity {
     AppCompatImageButton go_back_btn;
     AppCompatButton sign_in_btn;
-    Spinner genderSpinner;
+    Spinner genderSpinner, statusSpinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +44,6 @@ public class RegisterActivity extends AppCompatActivity {
             } else {
                 startActivity(new Intent(this, GetStarted.class));
             }
-
             finish();
         });
 
@@ -58,6 +57,24 @@ public class RegisterActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedGender = parent.getItemAtPosition(position).toString();
                 Toast.makeText(RegisterActivity.this, "Selected Gender: " + selectedGender, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // DO NOTHING (FOR NOW)
+            }
+        });
+
+        statusSpinner = findViewById(R.id.status_spinner);
+        ArrayAdapter<CharSequence> statusAdapter = ArrayAdapter.createFromResource(this, R.array.status_options, R.layout.custom_snipper_item);
+        statusAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
+        statusSpinner.setAdapter(statusAdapter);
+
+        statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedGender = parent.getItemAtPosition(position).toString();
+                Toast.makeText(RegisterActivity.this, "Selected Status: " + selectedGender, Toast.LENGTH_SHORT).show();
             }
 
             @Override
