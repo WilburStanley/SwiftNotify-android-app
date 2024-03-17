@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfileFragment">
+
+    <LinearLayout
+        android:id="@+id/profile_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="50dp"
+        android:layout_marginHorizontal="30dp"
+        android:orientation="vertical"
+        android:paddingVertical="20dp"
+        android:elevation="3dp"
+        android:background="@drawable/curve_gray_background">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="fitCenter"
+            android:src="@drawable/baseline_black_account"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:fontFamily="@font/acme"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/main_profile_system"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/profile_container"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginVertical="30dp"
+        android:elevation="2dp"
+        android:padding="10dp"
+        android:background="@drawable/curve_gray_background">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/personal_details"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:textAlignment="textStart"
+            android:fontFamily="@font/acme"
+            android:paddingHorizontal="10dp"
+            android:drawableEnd="@drawable/baseline_black_right_arrow"
+            android:background="@android:color/transparent"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/settingsBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:textAlignment="textStart"
+            android:fontFamily="@font/acme"
+            android:paddingHorizontal="10dp"
+            android:drawableEnd="@drawable/baseline_black_right_arrow"
+            android:background="@android:color/transparent"/>
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/log_out_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/main_profile_system"
+        android:layout_marginHorizontal="30dp"
+        android:text="@string/log_out"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:textAlignment="textStart"
+        android:fontFamily="@font/acme"
+        android:padding="15dp"
+        android:drawableEnd="@drawable/baseline_black_logout"
+        android:background="@drawable/curve_gray_background"/>
+
+</RelativeLayout>
