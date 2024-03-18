@@ -11,16 +11,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.mawd.swiftnotify.databinding.ActivityStudentPageBinding;
+import com.mawd.swiftnotify.databinding.ActivityMainPageBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class StudentPage extends AppCompatActivity{
-    ActivityStudentPageBinding binding;
+public class MainPage extends AppCompatActivity{
+    ActivityMainPageBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityStudentPageBinding.inflate(getLayoutInflater());
+        binding = ActivityMainPageBinding.inflate(getLayoutInflater());
         EdgeToEdge.enable(this);
         setContentView(binding.getRoot());
         replaceFragment(new HomeFragment());

@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".StudentPage"
+            android:name=".MainPage"
             android:exported="false" />
         <activity
             android:name=".SignInActivity"

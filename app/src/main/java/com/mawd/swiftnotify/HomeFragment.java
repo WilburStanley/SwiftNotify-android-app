@@ -7,36 +7,25 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class HomeFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     public HomeFragment() {
         // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
@@ -58,7 +47,53 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View view =  inflater.inflate(R.layout.fragment_home, container, false);
+
+        TextView availabilityStatus = view.findViewById(R.id.availabilityStatus);
+
+        // By default availability status must be set to affirmative
+        availabilityStatus.setText(R.string.affirmative);
+
+        View affirmativeBtn = view.findViewById(R.id.affirmative_button);
+        affirmativeBtn.setClickable(true);
+        affirmativeBtn.setOnClickListener(v -> {
+            Toast.makeText(getContext(), "Status Changed", Toast.LENGTH_SHORT).show();
+            availabilityStatus.setText(R.string.affirmative);
+        });
+
+        View negativeBtn = view.findViewById(R.id.negative_button);
+        negativeBtn.setClickable(true);
+        negativeBtn.setOnClickListener(v -> {
+            Toast.makeText(getContext(), "Status Changed", Toast.LENGTH_SHORT).show();
+            availabilityStatus.setText(R.string.negative);
+        });
+
+        LinearLayout student_ui = view.findViewById(R.id.student_ui);
+        LinearLayout teacher_ui = view.findViewById(R.id.teacher_ui);
+
+        FetchUserData fetchUserData = new FetchUserData();
+
+        fetchUserData.fetchUserStatus(new FetchUserData.FetchUserStatusCallback() {
+            @Override
+            public void onSuccess(String status) {
+                if (status.equals("Teacher")) {
+                    teacher_ui.setVisibility(View.VISIBLE);
+                    student_ui.setVisibility(View.GONE);
+                } else if (status.equals("Student")) {
+                    teacher_ui.setVisibility(View.GONE);
+                    student_ui.setVisibility(View.VISIBLE);
+                } else {
+                    teacher_ui.setVisibility(View.GONE);
+                    student_ui.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                // Handle failure in retrieving user status
+                e.printStackTrace(); // Print stack trace for debugging
+            }
+        });
+        return view;
     }
 }

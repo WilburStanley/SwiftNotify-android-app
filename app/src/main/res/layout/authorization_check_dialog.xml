@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/authorization_check_exit_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="20dp"
+        android:layout_alignParentTop="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/baseline_black_close"
+        android:background="@android:color/transparent"/>
+
+    <LinearLayout
+        android:layout_below="@id/authorization_check_exit_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:paddingBottom="30dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/passwordLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/password"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:fontFamily="@font/acme" />
+
+        <EditText
+            android:id="@+id/inputted_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:autofillHints="true"
+            android:background="@drawable/curve_gray_background_with_black_stroke"
+            android:fontFamily="@font/acme"
+            android:hint="@string/enter_your_password"
+            android:inputType="textPassword"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/dark_gray"
+            android:textSize="25sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/authorization_enter_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/enter"
+            android:textSize="25sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/acme"
+            android:padding="10dp"
+            android:background="@drawable/curve_black_background"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

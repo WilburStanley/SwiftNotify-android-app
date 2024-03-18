@@ -4,13 +4,13 @@
     <string name="register">Register</string>
     <string name="already_have_an_account">Already have an account?</string>
     <string name="sign_in">Sign in</string>
-    <string name="name">Name</string>
+    <string name="name">Name:</string>
     <string name="enter_your_full_name">Enter your full name</string>
     <string name="email">Email</string>
     <string name="enter_your_email">Enter your email</string>
-    <string name="age">Age</string>
+    <string name="age">Age:</string>
     <string name="enter_your_age">Enter your age</string>
-    <string name="password">Password</string>
+    <string name="password">Password:</string>
     <string name="enter_your_password">Enter your password</string>
     <string name="log_in_to_your_account">Log in to your account</string>
     <string name="welcome_back_please_enter_your_details">Welcome back! Please enter your details</string>
@@ -49,9 +49,25 @@
     <string name="availability">Availability:</string>
     <string name="curriculum_coordinator">Curriculum Coordinator</string>
     <string name="notify_school_s_educators">Notify School\'s Educators</string>
-    <string name="gender">Gender</string>
+    <string name="gender">Gender:</string>
     <string name="re_type_password">Re-type Password</string>
     <string name="select_status">Select Status</string>
+    <string name="are_you_available_to_receive_notifications">Are you available to receive notifications?</string>
+    <string name="affirmative">Affirmative</string>
+    <string name="negative">Negative</string>
+    <string name="availability_with_a_question">Availability?</string>
+    <string name="change_username">Change username</string>
+    <string name="change_email">Change email</string>
+    <string name="change_password">Change password</string>
+    <string name="current_email">Current Email:</string>
+    <string name="new_email">New Email:</string>
+    <string name="current_password">Current Password</string>
+    <string name="enter_new_password">Enter new password</string>
+    <string name="new_password">New Password</string>
+    <string name="enter_current_password">Enter current password</string>
+    <string name="enter_new_email">Enter new email</string>
+    <string name="enter_current_email">Enter current email</string>
+    <string name="enter">Enter</string>
 
     <string-array name="gender_options">
         <item>Male</item>

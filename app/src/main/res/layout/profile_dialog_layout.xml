@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/personalDetailExitBtn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_margin="15dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/baseline_black_close"
+        android:background="@android:color/transparent"/>
+
+    <LinearLayout
+        android:id="@+id/change_credentials_settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/personalDetailExitBtn"
+        android:layout_marginVertical="20dp"
+        android:layout_marginHorizontal="25dp"
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:background="@drawable/curve_gray_background_with_black_stroke"
+        android:visibility="visible">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/changeEmailBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/change_email"
+            android:textAllCaps="false"
+            android:textSize="23sp"
+            android:textColor="@color/black"
+            android:textAlignment="textStart"
+            android:fontFamily="@font/acme"
+            android:paddingHorizontal="10dp"
+            android:drawableEnd="@drawable/baseline_black_right_arrow"
+            android:background="@android:color/transparent"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/changePasswordBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/change_password"
+            android:textAllCaps="false"
+            android:textSize="23sp"
+            android:textColor="@color/black"
+            android:textAlignment="textStart"
+            android:fontFamily="@font/acme"
+            android:paddingHorizontal="10dp"
+            android:drawableEnd="@drawable/baseline_black_right_arrow"
+            android:background="@android:color/transparent"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/credentialChangeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/personalDetailExitBtn"
+        android:layout_marginHorizontal="20dp"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:id="@+id/changeEmailContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/inputCurrentEmailLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/current_email"
+                android:textColor="@color/black"
+                android:textSize="25sp"
+                android:fontFamily="@font/acme" />
+
+            <EditText
+                android:id="@+id/inputted_current_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:autofillHints="true"
+                android:background="@drawable/curve_gray_background_with_black_stroke"
+                android:fontFamily="@font/acme"
+                android:hint="@string/enter_current_email"
+                android:inputType="textEmailAddress"
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/dark_gray"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/inputNewEmailLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/new_email"
+                android:textColor="@color/black"
+                android:textSize="25sp"
+                android:fontFamily="@font/acme" />
+
+            <EditText
+                android:id="@+id/inputted_new_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:autofillHints="true"
+                android:background="@drawable/curve_gray_background_with_black_stroke"
+                android:fontFamily="@font/acme"
+                android:hint="@string/enter_new_email"
+                android:inputType="textEmailAddress"
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/dark_gray"
+                android:textSize="25sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/changeUserEmailBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/enter"
+                android:textAllCaps="false"
+                android:textSize="25sp"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:fontFamily="@font/acme"
+                android:padding="10dp"
+                android:layout_marginVertical="20dp"
+                android:background="@drawable/curve_black_background" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/changePasswordContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/inputCurrentPasswordLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/current_password"
+                android:textColor="@color/black"
+                android:textSize="25sp"
+                android:fontFamily="@font/acme" />
+
+            <EditText
+                android:id="@+id/inputted_current_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:autofillHints="true"
+                android:background="@drawable/curve_gray_background_with_black_stroke"
+                android:fontFamily="@font/acme"
+                android:hint="@string/enter_current_password"
+                android:inputType="textPassword"
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/dark_gray"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/inputNewPasswordLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/new_password"
+                android:textColor="@color/black"
+                android:textSize="25sp"
+                android:fontFamily="@font/acme" />
+
+            <EditText
+                android:id="@+id/inputted_new_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:autofillHints="true"
+                android:background="@drawable/curve_gray_background_with_black_stroke"
+                android:fontFamily="@font/acme"
+                android:hint="@string/enter_new_password"
+                android:inputType="textPassword"
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/dark_gray"
+                android:textSize="25sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/changeUserPasswordBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/enter"
+                android:textAllCaps="false"
+                android:textSize="25sp"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:fontFamily="@font/acme"
+                android:padding="10dp"
+                android:layout_marginVertical="20dp"
+                android:background="@drawable/curve_black_background" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

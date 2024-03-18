@@ -20,7 +20,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -161,27 +160,29 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
-
     @Override
     protected void onStart() {
         super.onStart();
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser != null) {
             //if may current user
-            startActivity(new Intent(this, StudentPage.class));
+            startActivity(new Intent(this, MainPage.class));
         }
     }
 
-    private void registerUser(User u, String password) {
-        auth.createUserWithEmailAndPassword(u.getUserEmail(), password)
+    private void registerUser(User user, String password) {
+        auth.createUserWithEmailAndPassword(user.getUserEmail(), password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(RegisterActivity.this, "Registered", Toast.LENGTH_SHORT).show();
-                            //Ikaw na bahala ano mangyayari after mag register
                             FirebaseUser currentUser = auth.getCurrentUser();
-                            writeUser(currentUser.getUid(), u);
+                            assert currentUser != null;
+                            writeUser(currentUser.getUid(), user);
+
+                            startActivity(new Intent(RegisterActivity.this, MainPage.class));
+                            Toast.makeText(RegisterActivity.this, "Welcome.", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(RegisterActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
@@ -189,7 +190,7 @@ public class RegisterActivity extends AppCompatActivity {
                 });
     }
 
-    private void writeUser(String userId, User u) {
-        db.child("users").child(userId).setValue(u);
+    private void writeUser(String userId, User user) {
+        db.child("users").child(userId).setValue(user);
     }
 }
