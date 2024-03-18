@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.androidApplication)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -7,7 +8,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.swiftnotify"
+        applicationId = "com.mawd.swiftnotify"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -44,4 +45,9 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    //Firebase implementations
+    implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
+    implementation ("com.google.firebase:firebase-core:9.6.1")
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-database")
 }

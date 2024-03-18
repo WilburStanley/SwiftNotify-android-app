@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "287603708893",
+    "firebase_url": "https://swift-notify-fc6ef-default-rtdb.firebaseio.com",
+    "project_id": "swift-notify-fc6ef",
+    "storage_bucket": "swift-notify-fc6ef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:287603708893:android:ce2942b709adc1ea395c34",
+        "android_client_info": {
+          "package_name": "com.mawd.swiftnotify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnqT7f9WAGqRqgexl_QfcdHhKUyDRMKvk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

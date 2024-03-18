@@ -3,6 +3,7 @@ package com.mawd.swiftnotify;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
@@ -10,12 +11,27 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.mawd.swiftnotify.models.User;
 
 public class ProfileFragment extends Fragment {
-    AppCompatButton settingsBtn;
+    private AppCompatButton settingsBtn;
+    private TextView username;
+    private DatabaseReference reference;
+    private FirebaseAuth auth;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -41,6 +57,8 @@ public class ProfileFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        auth = FirebaseAuth.getInstance();
+        setCurrentUsername();
     }
 
     @Override
@@ -82,10 +100,32 @@ public class ProfileFragment extends Fragment {
         AppCompatButton log_out_btn = view.findViewById(R.id.log_out_btn);
 
         log_out_btn.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(getContext(), GetStarted.class));
             requireActivity().finish();
         });
+        username = view.findViewById(R.id.username);
         return view;
     }
 
+    private void setCurrentUsername() {
+        FirebaseUser currentUser = auth.getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference("users");
+        reference.child(currentUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if(task.isSuccessful()) {
+                    if(task.getResult().exists()) {
+                        DataSnapshot snapshot = task.getResult();
+                        String name = String.valueOf(snapshot.child("fullName").getValue());
+                        username.setText(name);
+                    }else {
+                        Toast.makeText(getContext(), "User doesn't exists.", Toast.LENGTH_SHORT).show();
+                    }
+                }else {
+                    Toast.makeText(getContext(), "Failed to read.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
 }

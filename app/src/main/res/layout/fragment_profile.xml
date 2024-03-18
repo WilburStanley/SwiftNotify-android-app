@@ -26,13 +26,14 @@
             android:src="@drawable/baseline_black_account"/>
 
         <TextView
+            android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/acme"
             android:text="Username"
             android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="30sp"
-            android:fontFamily="@font/acme"/>
+            android:textSize="30sp" />
 
     </LinearLayout>
 

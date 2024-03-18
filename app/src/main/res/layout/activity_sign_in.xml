@@ -82,18 +82,19 @@
                 android:fontFamily="@font/acme"/>
 
             <EditText
+                android:id="@+id/logInEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:textSize="25sp"
+                android:autofillHints="true"
+                android:background="@drawable/curve_gray_background"
+                android:fontFamily="@font/acme"
+                android:hint="@string/enter_your_email"
+                android:inputType="text"
+                android:padding="10dp"
                 android:textColor="@color/black"
                 android:textColorHint="@color/dark_gray"
-                android:hint="@string/enter_your_email"
-                android:padding="10dp"
-                android:fontFamily="@font/acme"
-                android:background="@drawable/curve_gray_background"
-                android:autofillHints="true"
-                android:inputType="text" />
+                android:textSize="25sp" />
 
             <android.widget.Space
                 android:layout_width="match_parent"
@@ -108,18 +109,19 @@
                 android:fontFamily="@font/acme"/>
 
             <EditText
+                android:id="@+id/logInPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:textSize="25sp"
+                android:autofillHints="true"
+                android:background="@drawable/curve_gray_background"
+                android:fontFamily="@font/acme"
+                android:hint="@string/enter_your_password"
+                android:inputType="textPassword"
+                android:padding="10dp"
                 android:textColor="@color/black"
                 android:textColorHint="@color/dark_gray"
-                android:hint="@string/enter_your_password"
-                android:padding="10dp"
-                android:fontFamily="@font/acme"
-                android:background="@drawable/curve_gray_background"
-                android:autofillHints="true"
-                android:inputType="textPassword" />
+                android:textSize="25sp" />
 
             <android.widget.Space
                 android:layout_width="match_parent"
