@@ -243,12 +243,13 @@ public class ProfileFragment extends Fragment {
 
     private void changeEmail(String newEmail) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
         if (user != null) {
-            user.updateEmail(newEmail.trim())
+            user.verifyBeforeUpdateEmail(newEmail.trim())
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            Toast.makeText(getContext(), "Email updated successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Verification sent to the new email, please check.", Toast.LENGTH_SHORT).show();
+                            inputted_current_email.setText("");
+                            inputted_new_email.setText("");
                         } else {
                             String errorMessage = task.getException().getMessage();
                             Toast.makeText(getContext(), "Failed to update email: " + errorMessage, Toast.LENGTH_SHORT).show();
@@ -259,7 +260,6 @@ public class ProfileFragment extends Fragment {
             Toast.makeText(getContext(), "User not authenticated", Toast.LENGTH_SHORT).show();
         }
     }
-
     private void setCurrentUsername() {
         FirebaseUser currentUser = auth.getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("users");

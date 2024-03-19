@@ -27,10 +27,10 @@
             android:id="@+id/passwordLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/acme"
             android:text="@string/password"
             android:textColor="@color/black"
-            android:textSize="25sp"
-            android:fontFamily="@font/acme" />
+            android:textSize="25sp" />
 
         <EditText
             android:id="@+id/inputted_password"
