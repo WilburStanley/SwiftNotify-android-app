@@ -10,6 +10,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 public class GetStarted extends AppCompatActivity {
     AppCompatButton register_btn, sign_in_btn;
 

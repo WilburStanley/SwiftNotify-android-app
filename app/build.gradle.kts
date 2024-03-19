@@ -50,4 +50,5 @@ dependencies {
     implementation ("com.google.firebase:firebase-core:9.6.1")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-database")
+    implementation ("com.google.firebase:firebase-messaging:9.4.0");
 }

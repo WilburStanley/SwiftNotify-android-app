@@ -54,6 +54,7 @@ public class ProfileFragment extends Fragment {
     public ProfileFragment() {
         // Required empty public constructor
     }
+
     public static ProfileFragment newInstance(String param1, String param2) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
@@ -180,6 +181,7 @@ public class ProfileFragment extends Fragment {
     interface AuthorizationCallback {
         void onAuthorizationResult(boolean isAuthorized);
     }
+
     private void checkAuthorization(AuthorizationCallback callback) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -222,6 +224,7 @@ public class ProfileFragment extends Fragment {
                     });
         });
     }
+
     private void setReference(View view) {
         change_credentials_settings = view.findViewById(R.id.change_credentials_settings);
         changeEmailContainer = view.findViewById(R.id.changeEmailContainer);
@@ -238,10 +241,10 @@ public class ProfileFragment extends Fragment {
         changePasswordContainer.setVisibility(View.GONE);
     }
 
-    private void changeEmail(String newEmail){
+    private void changeEmail(String newEmail) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        if(user != null){
+        if (user != null) {
             user.updateEmail(newEmail.trim())
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
@@ -260,20 +263,17 @@ public class ProfileFragment extends Fragment {
     private void setCurrentUsername() {
         FirebaseUser currentUser = auth.getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("users");
-        reference.child(currentUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if(task.isSuccessful()) {
-                    if(task.getResult().exists()) {
-                        DataSnapshot snapshot = task.getResult();
-                        String name = String.valueOf(snapshot.child("fullName").getValue());
-                        username.setText(name);
-                    }else {
-                        Toast.makeText(getContext(), "User doesn't exists.", Toast.LENGTH_SHORT).show();
-                    }
-                }else {
-                    Toast.makeText(getContext(), "Failed to read.", Toast.LENGTH_SHORT).show();
+        reference.child(currentUser.getUid()).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                if (task.getResult().exists()) {
+                    DataSnapshot snapshot = task.getResult();
+                    String name = String.valueOf(snapshot.child("fullName").getValue());
+                    username.setText(name);
+                } else {
+                    Toast.makeText(getContext(), "User doesn't exists.", Toast.LENGTH_SHORT).show();
                 }
+            } else {
+                Toast.makeText(getContext(), "Failed to read.", Toast.LENGTH_SHORT).show();
             }
         });
     }
