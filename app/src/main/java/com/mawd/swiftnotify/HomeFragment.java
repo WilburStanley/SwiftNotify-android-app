@@ -87,7 +87,6 @@ public class HomeFragment extends Fragment {
                     student_ui.setVisibility(View.GONE);
                 }
             }
-
             @Override
             public void onFailure(Exception e) {
                 // Handle failure in retrieving user status

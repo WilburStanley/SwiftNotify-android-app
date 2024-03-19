@@ -7,7 +7,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
@@ -15,12 +14,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public class SignInActivity extends AppCompatActivity {
@@ -30,6 +30,7 @@ public class SignInActivity extends AppCompatActivity {
 
     //Firebase objects
     private FirebaseAuth auth;
+    private DatabaseReference reference;
 
     private void findReferences() {
         go_back_btn = findViewById(R.id.go_back_btn);
@@ -38,6 +39,7 @@ public class SignInActivity extends AppCompatActivity {
         logInEmail = findViewById(R.id.logInEmail);
         logInPassword = findViewById(R.id.logInPassword);
         auth = FirebaseAuth.getInstance();
+        reference = FirebaseDatabase.getInstance().getReference().child("users");
     }
 
     private boolean isValidEmail(String email) {
@@ -91,22 +93,40 @@ public class SignInActivity extends AppCompatActivity {
 
     private void signInUser(String email, String password) {
         auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            startActivity(new Intent(SignInActivity.this, MainPage.class));
-                            Toast.makeText(SignInActivity.this, "Welcome.", Toast.LENGTH_SHORT).show();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(SignInActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                        }
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        addTokenToDatabase();
+                        startActivity(new Intent(SignInActivity.this, MainPage.class));
+                        Toast.makeText(SignInActivity.this, "Welcome.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Toast.makeText(SignInActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    private void sendEmailVerification() {
+    public void addTokenToDatabase() {
+        FirebaseUser user = auth.getCurrentUser();
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            String token = task.getResult();
+            HashMap<String, Object> tokenMap = new HashMap<>();
+            tokenMap.put("deviceToken", token);
+            reference.child(user.getUid()).updateChildren(tokenMap)
+                    .addOnCompleteListener(task2 -> {
+                        if (task2.isSuccessful()) {
+                            Log.d("Success", "Token added successfully");
+                        } else {
+                            Log.d("Failed", "Failed to add token: " + task2.getException().getMessage());
+                        }
+                    });
+        });
+    }
+    /*private void sendEmailVerification() {
         FirebaseUser user = auth.getCurrentUser();
 
         if (user != null) {
@@ -117,5 +137,5 @@ public class SignInActivity extends AppCompatActivity {
                         }
                     });
         }
-    }
+    }*/
 }

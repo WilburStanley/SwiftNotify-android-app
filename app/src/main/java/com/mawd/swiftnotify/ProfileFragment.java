@@ -2,19 +2,10 @@ package com.mawd.swiftnotify;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.AppCompatImageButton;
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.fragment.app.Fragment;
-
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,14 +16,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.fragment.app.Fragment;
+
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -260,18 +253,15 @@ public class ProfileFragment extends Fragment {
             Toast.makeText(getContext(), "User not authenticated", Toast.LENGTH_SHORT).show();
         }
     }
+
     private void setCurrentUsername() {
         FirebaseUser currentUser = auth.getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("users");
         reference.child(currentUser.getUid()).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                if (task.getResult().exists()) {
-                    DataSnapshot snapshot = task.getResult();
-                    String name = String.valueOf(snapshot.child("fullName").getValue());
-                    username.setText(name);
-                } else {
-                    Toast.makeText(getContext(), "User doesn't exists.", Toast.LENGTH_SHORT).show();
-                }
+                DataSnapshot snapshot = task.getResult();
+                String name = snapshot.exists() ? String.valueOf(snapshot.child("fullName").getValue()) : "No Name";
+                username.setText(name);
             } else {
                 Toast.makeText(getContext(), "Failed to read.", Toast.LENGTH_SHORT).show();
             }
