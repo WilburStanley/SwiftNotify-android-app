@@ -6,6 +6,7 @@ public class User {
     private String userGender;
     private String userStatus;
     private String userEmail;
+    private boolean isAvailable;
 
     public User() {
         //Default constructor
@@ -17,6 +18,23 @@ public class User {
         this.userGender = userGender;
         this.userStatus = userStatus;
         this.userEmail = userEmail;
+    }
+
+    public User(String fullName, int age, String userGender, String userStatus, String userEmail, boolean isAvailable) {
+        this.fullName = fullName;
+        this.age = age;
+        this.userGender = userGender;
+        this.userStatus = userStatus;
+        this.userEmail = userEmail;
+        this.isAvailable = isAvailable;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
     }
 
     public String getFullName() {

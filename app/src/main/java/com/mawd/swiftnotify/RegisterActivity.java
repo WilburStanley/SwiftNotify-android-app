@@ -2,6 +2,7 @@ package com.mawd.swiftnotify;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -10,7 +11,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
@@ -18,15 +18,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.mawd.swiftnotify.models.User;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -153,13 +152,19 @@ public class RegisterActivity extends AppCompatActivity {
             } else if (!password.equals(retypePass)) {
                 Toast.makeText(this, "Password doesn't match.", Toast.LENGTH_SHORT).show();
             } else {
+                User u;
                 int convertedAge = Integer.parseInt(age);
-                User u = new User(fullName, convertedAge, selectedGender, selectedStatus, email);
+                if (selectedStatus.equals("Teacher")) {
+                    u = new User(fullName, convertedAge, selectedGender, selectedStatus, email, true);
+                } else {
+                    u = new User(fullName, convertedAge, selectedGender, selectedStatus, email);
+                }
                 registerUser(u, password);
                 clearInputs();
             }
         });
     }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -172,20 +177,17 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void registerUser(User user, String password) {
         auth.createUserWithEmailAndPassword(user.getUserEmail(), password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(RegisterActivity.this, "Registered", Toast.LENGTH_SHORT).show();
-                            FirebaseUser currentUser = auth.getCurrentUser();
-                            assert currentUser != null;
-                            writeUser(currentUser.getUid(), user);
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(RegisterActivity.this, "Registered", Toast.LENGTH_SHORT).show();
+                        FirebaseUser currentUser = auth.getCurrentUser();
+                        assert currentUser != null;
+                        writeUser(currentUser.getUid(), user);
 
-                            startActivity(new Intent(RegisterActivity.this, MainPage.class));
-                            Toast.makeText(RegisterActivity.this, "Welcome.", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(RegisterActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                        }
+                        startActivity(new Intent(RegisterActivity.this, MainPage.class));
+                        Toast.makeText(RegisterActivity.this, "Welcome.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(RegisterActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -193,4 +195,5 @@ public class RegisterActivity extends AppCompatActivity {
     private void writeUser(String userId, User user) {
         db.child("users").child(userId).setValue(user);
     }
+
 }
