@@ -154,8 +154,8 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(this, "Password doesn't match.", Toast.LENGTH_SHORT).show();
             } else {
                 int convertedAge = Integer.parseInt(age);
-                User u = new User(fullName, convertedAge, selectedGender, selectedStatus, email);
-                registerUser(u, password);
+                User user = new User(fullName, convertedAge, selectedGender, selectedStatus, email);
+                registerUser(user, password);
                 clearInputs();
             }
         });
@@ -191,6 +191,10 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void writeUser(String userId, User user) {
+        if (user.getUserStatus() != null && user.getUserStatus().equalsIgnoreCase("Teacher")) {
+            user.setIsTeacherAvailable(true);
+        }
+
         db.child("users").child(userId).setValue(user);
     }
 }

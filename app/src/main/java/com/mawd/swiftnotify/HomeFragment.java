@@ -2,8 +2,12 @@ package com.mawd.swiftnotify;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +15,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.mawd.swiftnotify.models.User;
+
+import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -23,6 +30,11 @@ public class HomeFragment extends Fragment {
 
     private String mParam1;
     private String mParam2;
+    RecyclerView recyclerView;
+    DatabaseReference databaseReference;
+    TeacherAdapter teacherAdapter;
+    ArrayList<User> teacherList;
+    User user;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -93,6 +105,38 @@ public class HomeFragment extends Fragment {
                 e.printStackTrace(); // Print stack trace for debugging
             }
         });
+
+        recyclerView = view.findViewById(R.id.teacherList);
+        databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        teacherList = new ArrayList<>();
+        teacherAdapter = new TeacherAdapter(getContext(), teacherList);
+        recyclerView.setAdapter(teacherAdapter);
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                teacherList.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    User teacher = dataSnapshot.getValue(User.class);
+
+                    assert teacher != null;
+                    String userStatus = teacher.getUserStatus();
+                    if (userStatus != null && userStatus.equalsIgnoreCase("Teacher")) {
+                        Log.d("Teacher_Added:", "Teacher added to teacherList: " + teacher.getFullName());
+                        teacherList.add(teacher);
+                    }
+                }
+                teacherAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
         return view;
     }
 }
