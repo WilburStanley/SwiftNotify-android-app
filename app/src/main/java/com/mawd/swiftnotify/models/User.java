@@ -63,7 +63,6 @@ public class User {
     public boolean isTeacherAvailable() {
         return teacherAvailable;
     }
-
     public void setIsTeacherAvailable(boolean teacherAvailable) {
         this.teacherAvailable = teacherAvailable;
     }
