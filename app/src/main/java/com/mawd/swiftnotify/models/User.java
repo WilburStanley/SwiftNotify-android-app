@@ -6,7 +6,7 @@ public class User {
     private String userGender;
     private String userStatus;
     private String userEmail;
-    private boolean isTeacherAvailable;
+    private boolean teacherAvailable;
 
     public User() {
         //Default constructor
@@ -61,10 +61,10 @@ public class User {
     }
 
     public boolean isTeacherAvailable() {
-        return isTeacherAvailable;
+        return teacherAvailable;
     }
 
     public void setIsTeacherAvailable(boolean teacherAvailable) {
-        isTeacherAvailable = teacherAvailable;
+        this.teacherAvailable = teacherAvailable;
     }
 }
