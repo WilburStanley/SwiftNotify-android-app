@@ -10,14 +10,18 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class GetStarted extends AppCompatActivity {
     AppCompatButton register_btn, sign_in_btn;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        auth = FirebaseAuth.getInstance();
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_get_started);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -38,5 +42,15 @@ public class GetStarted extends AppCompatActivity {
             startActivity(new Intent(this, SignInActivity.class).putExtra("PREVIOUS_PAGE", "GET_STARTED_PAGE"));
             finish();
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if(currentUser != null){
+            startActivity(new Intent(getApplicationContext(), MainPage.class));
+            finish();
+        }
     }
 }
