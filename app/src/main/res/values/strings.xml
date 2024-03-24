@@ -68,6 +68,7 @@
     <string name="enter_new_email">Enter new email</string>
     <string name="enter_current_email">Enter current email</string>
     <string name="enter">Enter</string>
+    <string name="beep_me">Beep Me</string>
 
     <string-array name="gender_options">
         <item>Male</item>

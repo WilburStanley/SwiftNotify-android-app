@@ -1,5 +1,6 @@
 package com.mawd.swiftnotify;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,7 +25,7 @@ import com.mawd.swiftnotify.models.User;
 
 import java.util.ArrayList;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements SelectListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -112,7 +113,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         teacherList = new ArrayList<>();
-        teacherAdapter = new TeacherAdapter(getContext(), teacherList);
+        teacherAdapter = new TeacherAdapter(getContext(), teacherList, this);
         recyclerView.setAdapter(teacherAdapter);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -138,5 +139,19 @@ public class HomeFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        User clickedUser = teacherList.get(position);
+
+        Intent intent = new Intent(getContext(), ContentPage.class);
+
+        intent.putExtra("TEACHER_NAME", clickedUser.getFullName());
+
+        boolean availability_value = clickedUser.isTeacherAvailable();
+        intent.putExtra("TEACHER_AVAILABILITY", String.valueOf(availability_value));
+
+        startActivity(intent);
     }
 }

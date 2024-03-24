@@ -15,19 +15,21 @@ import java.util.ArrayList;
 
 
 public class TeacherAdapter extends RecyclerView.Adapter<TeacherAdapter.TeacherViewHolder> {
+    private final SelectListener selectListener;
     Context context;
     ArrayList<User> list;
 
-    public TeacherAdapter(Context context, ArrayList<User> list) {
+    public TeacherAdapter(Context context, ArrayList<User> list, SelectListener selectListener) {
         this.context = context;
         this.list = list;
+        this.selectListener = selectListener;
     }
 
     @NonNull
     @Override
     public TeacherViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.teacher_beep_card, parent, false);
-        return new TeacherViewHolder(view);
+        return new TeacherViewHolder(view, selectListener);
     }
 
     @Override
@@ -55,11 +57,21 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherAdapter.TeacherV
     public static class TeacherViewHolder extends RecyclerView.ViewHolder {
         TextView teacherFullName, isTeacherAvailable;
 
-        public TeacherViewHolder(@NonNull View itemView) {
+        public TeacherViewHolder(@NonNull View itemView, SelectListener selectListener) {
             super(itemView);
 
             teacherFullName = itemView.findViewById(R.id.teacherFullName);
             isTeacherAvailable = itemView.findViewById(R.id.teacherAvailabilityValue);
+
+            itemView.setOnClickListener(v -> {
+                if (selectListener != null){
+                    int position = getAdapterPosition();
+
+                    if (position != RecyclerView.NO_POSITION){
+                        selectListener.onItemClick(position);
+                    }
+                }
+            });
         }
     }
 }
