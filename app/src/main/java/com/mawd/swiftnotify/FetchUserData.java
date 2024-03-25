@@ -51,12 +51,11 @@ public class FetchUserData {
                     boolean isTeacherAvailable = task.getResult().getValue(Boolean.class);
                     callback.onTeacherAvailabilityFetched(isTeacherAvailable);
                 } else {
-                    // Handle failure to fetch teacher availability
-                    callback.onTeacherAvailabilityFetched(false); // Assuming teacher is not available if fetch fails
+                    callback.onTeacherAvailabilityFetched(false);
                 }
             });
         } else {
-            callback.onTeacherAvailabilityFetched(false); // User not logged in
+            callback.onTeacherAvailabilityFetched(false);
         }
     }
 }
