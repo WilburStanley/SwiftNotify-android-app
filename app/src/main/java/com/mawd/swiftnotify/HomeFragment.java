@@ -1,6 +1,8 @@
 package com.mawd.swiftnotify;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,7 +54,6 @@ public class HomeFragment extends Fragment implements SelectListener {
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +62,6 @@ public class HomeFragment extends Fragment implements SelectListener {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,10 +69,17 @@ public class HomeFragment extends Fragment implements SelectListener {
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
         auth = FirebaseAuth.getInstance();
 
+        FetchUserData fetchUserData = new FetchUserData();
+
         TextView availabilityStatus = view.findViewById(R.id.availabilityStatus);
 
-        // By default availability status must be set to affirmative
-        availabilityStatus.setText(R.string.affirmative);
+        fetchUserData.fetchTeacherAvailability(isTeacherAvailable -> {
+            if (isTeacherAvailable) {
+                availabilityStatus.setText(R.string.affirmative);
+            } else {
+                availabilityStatus.setText(R.string.negative);
+            }
+        });
 
         View affirmativeBtn = view.findViewById(R.id.affirmative_button);
         affirmativeBtn.setClickable(true);
@@ -88,14 +95,12 @@ public class HomeFragment extends Fragment implements SelectListener {
         negativeBtn.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Status Changed", Toast.LENGTH_SHORT).show();
             teacherAvailable = false;
-            updateTeacherAvailability(false);
+            updateTeacherAvailability(teacherAvailable);
             availabilityStatus.setText(!teacherAvailable ? "Negative" : "Error");
         });
 
         LinearLayout student_ui = view.findViewById(R.id.student_ui);
         LinearLayout teacher_ui = view.findViewById(R.id.teacher_ui);
-
-        FetchUserData fetchUserData = new FetchUserData();
 
         fetchUserData.fetchUserStatus(new FetchUserData.FetchUserStatusCallback() {
             @Override

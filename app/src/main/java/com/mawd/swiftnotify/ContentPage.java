@@ -25,6 +25,7 @@ public class ContentPage extends AppCompatActivity {
     TextView teacherName, teacherAvailability;
     AppCompatButton beepBtn;
     ActivityResultLauncher<ScanOptions> barLauncher;
+    private boolean beepBtnAvailable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,9 +56,12 @@ public class ContentPage extends AppCompatActivity {
         if (teacher_availability.equalsIgnoreCase("true")){
             teacherAvailability.setTextColor(color_green);
             teacherAvailability.setText(R.string.affirmative);
+            beepBtnAvailable = true;
+
         } else if (teacher_availability.equalsIgnoreCase("false")){
             teacherAvailability.setTextColor(color_red);
             teacherAvailability.setText(R.string.negative);
+            beepBtnAvailable = false;
         }
 
         go_back_btn.setOnClickListener(v -> {
@@ -65,8 +69,11 @@ public class ContentPage extends AppCompatActivity {
         });
 
         beepBtn.setOnClickListener(v -> {
-            scanCode();
-            Toast.makeText(this, "BEEP ME BTN CLICKED", Toast.LENGTH_SHORT).show();
+            if (beepBtnAvailable) {
+                scanCode();
+            } else {
+                Toast.makeText(this, "User not available", Toast.LENGTH_SHORT).show();
+            }
         });
 
         barLauncher = registerForActivityResult(new ScanContract(), result-> {

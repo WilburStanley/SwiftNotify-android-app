@@ -6,6 +6,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class FetchUserData {
     private FirebaseAuth auth;
@@ -30,11 +31,32 @@ public class FetchUserData {
                     String status = snapshot.exists() ? String.valueOf(snapshot.getValue()) : "Status unknown";
                     callback.onSuccess(status);
                 } else {
-                    callback.onFailure(task.getException());
+                    callback.onFailure(new Exception("Failed to fetch user status"));
                 }
             });
         } else {
             callback.onFailure(new Exception("User is not logged in"));
+        }
+    }
+
+    public interface TeacherAvailabilityCallback {
+        void onTeacherAvailabilityFetched(boolean isTeacherAvailable);
+    }
+
+    public void fetchTeacherAvailability(TeacherAvailabilityCallback callback) {
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            reference.child(currentUser.getUid()).child("teacherAvailable").get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    boolean isTeacherAvailable = task.getResult().getValue(Boolean.class);
+                    callback.onTeacherAvailabilityFetched(isTeacherAvailable);
+                } else {
+                    // Handle failure to fetch teacher availability
+                    callback.onTeacherAvailabilityFetched(false); // Assuming teacher is not available if fetch fails
+                }
+            });
+        } else {
+            callback.onTeacherAvailabilityFetched(false); // User not logged in
         }
     }
 }
