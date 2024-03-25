@@ -1,8 +1,6 @@
 package com.mawd.swiftnotify;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +22,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceIdReceiver;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
 import com.mawd.swiftnotify.models.User;
 
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class HomeFragment extends Fragment implements SelectListener {
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +64,7 @@ public class HomeFragment extends Fragment implements SelectListener {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -86,7 +89,7 @@ public class HomeFragment extends Fragment implements SelectListener {
         affirmativeBtn.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Status Changed", Toast.LENGTH_SHORT).show();
             teacherAvailable = true;
-            updateTeacherAvailability(teacherAvailable);
+            updateTeacherAvailability(true);
             availabilityStatus.setText(teacherAvailable ? "Affirmative" : "Error");
         });
 
@@ -95,7 +98,7 @@ public class HomeFragment extends Fragment implements SelectListener {
         negativeBtn.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Status Changed", Toast.LENGTH_SHORT).show();
             teacherAvailable = false;
-            updateTeacherAvailability(teacherAvailable);
+            updateTeacherAvailability(false);
             availabilityStatus.setText(!teacherAvailable ? "Negative" : "Error");
         });
 
@@ -169,7 +172,7 @@ public class HomeFragment extends Fragment implements SelectListener {
 
         boolean availability_value = clickedUser.isTeacherAvailable();
         intent.putExtra("TEACHER_AVAILABILITY", String.valueOf(availability_value));
-
+        intent.putExtra("teacherToken", clickedUser.getDeviceToken());
         startActivity(intent);
     }
 
@@ -186,4 +189,5 @@ public class HomeFragment extends Fragment implements SelectListener {
                     }
                 });
     }
+
 }

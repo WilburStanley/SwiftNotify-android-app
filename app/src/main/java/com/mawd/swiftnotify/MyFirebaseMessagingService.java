@@ -21,8 +21,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage message) {
         super.onMessageReceived(message);
 
-        System.out.println("From: " + message.getFrom());
-
         if (message.getNotification() != null) {
             System.out.println("Message Notification Body: " + message.getNotification().getBody());
         }
@@ -31,7 +29,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void sendNotification(String messageBody) {
         int notificationId = (int) System.currentTimeMillis();
-        Intent intent = new Intent(this, GetStarted.class);
+        Intent intent = new Intent(this, MainPage.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_IMMUTABLE);
@@ -41,7 +39,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.drawable.ic_notification)
-                        .setContentTitle("My new notification")
+                        .setContentTitle("Set Title Here")
                         .setContentText(messageBody)
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)

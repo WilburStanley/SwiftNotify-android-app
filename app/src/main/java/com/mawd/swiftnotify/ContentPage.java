@@ -19,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
+import com.mawd.swiftnotify.models.FcmNotificationsSender;
 
 public class ContentPage extends AppCompatActivity {
     AppCompatImageButton go_back_btn;
@@ -26,6 +27,7 @@ public class ContentPage extends AppCompatActivity {
     AppCompatButton beepBtn;
     ActivityResultLauncher<ScanOptions> barLauncher;
     private boolean beepBtnAvailable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +48,7 @@ public class ContentPage extends AppCompatActivity {
 
         String teacher_name = getIntent().getStringExtra("TEACHER_NAME");
         String teacher_availability = getIntent().getStringExtra("TEACHER_AVAILABILITY");
+        String teacherToken = getIntent().getStringExtra("teacherToken");
 
         teacherName.setText(teacher_name);
 
@@ -53,12 +56,12 @@ public class ContentPage extends AppCompatActivity {
         int color_red = ContextCompat.getColor(this, R.color.red);
 
         assert teacher_availability != null;
-        if (teacher_availability.equalsIgnoreCase("true")){
+        if (teacher_availability.equalsIgnoreCase("true")) {
             teacherAvailability.setTextColor(color_green);
             teacherAvailability.setText(R.string.affirmative);
             beepBtnAvailable = true;
 
-        } else if (teacher_availability.equalsIgnoreCase("false")){
+        } else if (teacher_availability.equalsIgnoreCase("false")) {
             teacherAvailability.setTextColor(color_red);
             teacherAvailability.setText(R.string.negative);
             beepBtnAvailable = false;
@@ -76,21 +79,25 @@ public class ContentPage extends AppCompatActivity {
             }
         });
 
-        barLauncher = registerForActivityResult(new ScanContract(), result-> {
-            if(result.getContents() != null) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        barLauncher = registerForActivityResult(new ScanContract(), result -> {
+            if (result.getContents() != null) {
+               /* AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Result")
                         .setMessage(result.getContents())
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();;
+                                dialog.dismiss();
                             }
-                        }).show();
+                        }).show();*/
+                FcmNotificationsSender sender = new FcmNotificationsSender(teacherToken, "Swift Notify", result.getContents(), getApplicationContext(),  ContentPage.this);
+                sender.SendNotifications();
             }
         });
+
+
     }
-    private void scanCode(){
+    private void scanCode() {
         ScanOptions options = new ScanOptions();
         options.setPrompt("Volume up to flash on")
                 .setBeepEnabled(true)

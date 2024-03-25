@@ -6,6 +6,7 @@ public class User {
     private String userGender;
     private String userStatus;
     private String userEmail;
+    private String deviceToken;
     private boolean teacherAvailable;
 
     public User() {
@@ -74,5 +75,13 @@ public class User {
     }
     public void setIsTeacherAvailable(boolean teacherAvailable) {
         this.teacherAvailable = teacherAvailable;
+    }
+
+    public String getDeviceToken() {
+        return deviceToken;
+    }
+
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
     }
 }
