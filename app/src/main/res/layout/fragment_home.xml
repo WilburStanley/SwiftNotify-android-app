@@ -83,26 +83,26 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
             android:layout_marginTop="50dp"
-            android:padding="20dp"
+            android:background="@drawable/curve_gray_background"
             android:orientation="vertical"
-            android:background="@drawable/curve_gray_background">
+            android:padding="20dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/acme"
                 android:text="Head Text (fix this)"
-                android:textSize="25sp"
                 android:textColor="@color/black"
-                android:fontFamily="@font/acme"/>
+                android:textSize="25sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:fontFamily="@font/acme"
                 android:text="A short introduction to what is this idk anymore"
-                android:textSize="20sp"
                 android:textColor="@color/black"
-                android:fontFamily="@font/acme"/>
+                android:textSize="20sp" />
 
         </LinearLayout>
 
@@ -111,19 +111,19 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
             android:layout_marginTop="20dp"
+            android:background="@drawable/curve_gray_background"
+            android:orientation="vertical"
             android:paddingHorizontal="20dp"
             android:paddingTop="20dp"
-            android:paddingBottom="10dp"
-            android:orientation="vertical"
-            android:background="@drawable/curve_gray_background">
+            android:paddingBottom="10dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/acme"
                 android:text="@string/are_you_available_to_receive_notifications"
-                android:textSize="28sp"
                 android:textColor="@color/black"
-                android:fontFamily="@font/acme"/>
+                android:textSize="28sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -132,8 +132,8 @@
                 android:orientation="vertical">
 
                 <android.widget.Space
-                    android:layout_height="15dp"
-                    android:layout_width="match_parent"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp" />
 
                 <include
                     android:id="@+id/affirmative_button"
@@ -141,13 +141,13 @@
                     android:focusable="true" />
 
                 <android.widget.Space
-                    android:layout_height="10dp"
-                    android:layout_width="match_parent"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
 
                 <include
                     android:id="@+id/negative_button"
-                    android:focusable="true"
-                    layout="@layout/negative_button"/>
+                    layout="@layout/negative_button"
+                    android:focusable="true" />
             </LinearLayout>
 
         </LinearLayout>
@@ -157,9 +157,9 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
             android:layout_marginTop="20dp"
-            android:padding="20dp"
+            android:background="@drawable/curve_gray_background"
             android:orientation="vertical"
-            android:background="@drawable/curve_gray_background">
+            android:padding="20dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -170,19 +170,19 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/acme"
                     android:text="@string/availability_with_a_question"
-                    android:textSize="25sp"
                     android:textColor="@color/black"
-                    android:fontFamily="@font/acme"/>
+                    android:textSize="25sp" />
 
                 <TextView
                     android:id="@+id/availabilityStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
-                    android:textSize="25sp"
+                    android:fontFamily="@font/acme"
                     android:textColor="@color/black"
-                    android:fontFamily="@font/acme"/>
+                    android:textSize="25sp" />
 
             </LinearLayout>
 

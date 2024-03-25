@@ -2,12 +2,6 @@ package com.mawd.swiftnotify;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +10,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,21 +25,25 @@ import com.google.firebase.database.ValueEventListener;
 import com.mawd.swiftnotify.models.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class HomeFragment extends Fragment implements SelectListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    private boolean teacherAvailable = false;
     private String mParam1;
     private String mParam2;
     RecyclerView recyclerView;
     DatabaseReference databaseReference;
+    FirebaseAuth auth;
     TeacherAdapter teacherAdapter;
     ArrayList<User> teacherList;
-    User user;
+
     public HomeFragment() {
         // Required empty public constructor
     }
+
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
@@ -60,7 +65,9 @@ public class HomeFragment extends Fragment implements SelectListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        auth = FirebaseAuth.getInstance();
 
         TextView availabilityStatus = view.findViewById(R.id.availabilityStatus);
 
@@ -71,14 +78,18 @@ public class HomeFragment extends Fragment implements SelectListener {
         affirmativeBtn.setClickable(true);
         affirmativeBtn.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Status Changed", Toast.LENGTH_SHORT).show();
-            availabilityStatus.setText(R.string.affirmative);
+            teacherAvailable = true;
+            updateTeacherAvailability(teacherAvailable);
+            availabilityStatus.setText(teacherAvailable ? "Affirmative" : "Error");
         });
 
         View negativeBtn = view.findViewById(R.id.negative_button);
         negativeBtn.setClickable(true);
         negativeBtn.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Status Changed", Toast.LENGTH_SHORT).show();
-            availabilityStatus.setText(R.string.negative);
+            teacherAvailable = false;
+            updateTeacherAvailability(false);
+            availabilityStatus.setText(!teacherAvailable ? "Negative" : "Error");
         });
 
         LinearLayout student_ui = view.findViewById(R.id.student_ui);
@@ -100,6 +111,7 @@ public class HomeFragment extends Fragment implements SelectListener {
                     student_ui.setVisibility(View.GONE);
                 }
             }
+
             @Override
             public void onFailure(Exception e) {
                 // Handle failure in retrieving user status
@@ -108,7 +120,7 @@ public class HomeFragment extends Fragment implements SelectListener {
         });
 
         recyclerView = view.findViewById(R.id.teacherList);
-        databaseReference = FirebaseDatabase.getInstance().getReference("users");
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -135,6 +147,7 @@ public class HomeFragment extends Fragment implements SelectListener {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                // Handle onCancelled event
             }
         });
 
@@ -153,5 +166,19 @@ public class HomeFragment extends Fragment implements SelectListener {
         intent.putExtra("TEACHER_AVAILABILITY", String.valueOf(availability_value));
 
         startActivity(intent);
+    }
+
+    private void updateTeacherAvailability(boolean teacherAvailable) {
+        FirebaseUser teacher = auth.getCurrentUser();
+        HashMap<String, Object> availabilityMap = new HashMap<>();
+        availabilityMap.put("teacherAvailable", teacherAvailable);
+        databaseReference.child(teacher.getUid()).updateChildren(availabilityMap)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("Success", "Availability Updated");
+                    } else {
+                        Log.d("Failed", "Availability Failed to Update");
+                    }
+                });
     }
 }

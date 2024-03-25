@@ -39,7 +39,6 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherAdapter.TeacherV
 
         if (userStatus != null && userStatus.equalsIgnoreCase("Teacher")){
             holder.teacherFullName.setText(teacher.getFullName());
-
             boolean isTeacherAvailable = teacher.isTeacherAvailable();
             if (isTeacherAvailable) {
                 holder.isTeacherAvailable.setText(R.string.affirmative);

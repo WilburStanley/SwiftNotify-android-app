@@ -20,6 +20,15 @@ public class User {
         this.userEmail = userEmail;
     }
 
+    public User(String fullName, int age, String userGender, String userStatus, String email, boolean teacherAvailable) {
+        this.fullName = fullName;
+        this.age = age;
+        this.userGender = userGender;
+        this.userStatus = userStatus;
+        this.userEmail = email;
+        this.teacherAvailable = teacherAvailable;
+    }
+
     public String getFullName() {
         return fullName;
     }
