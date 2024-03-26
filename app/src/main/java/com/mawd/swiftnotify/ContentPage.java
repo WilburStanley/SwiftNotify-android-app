@@ -94,7 +94,7 @@ public class ContentPage extends AppCompatActivity {
                                     getApplicationContext(), // Context
                                     ContentPage.this // Activity
                             );
-                            sender.SendNotifications();
+                            sender.SendNotifications(true);
                             Toast.makeText(ContentPage.this, "Successfully Notified", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(ContentPage.this, "Failed to Notify", Toast.LENGTH_SHORT).show();

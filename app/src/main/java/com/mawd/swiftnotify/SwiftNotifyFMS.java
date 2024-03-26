@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Vibrator;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -15,7 +16,7 @@ import androidx.core.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-public class MyFirebaseMessagingService extends FirebaseMessagingService {
+public class SwiftNotifyFMS extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage message) {
@@ -25,6 +26,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             System.out.println("Message Notification Body: " + message.getNotification().getBody());
         }
         sendNotification(message.getNotification().getBody());
+
+        if (message.getData().containsKey("vibrate") && Boolean.parseBoolean(message.getData().get("vibrate"))) {
+            vibratePhone();
+        }
     }
 
     private void sendNotification(String messageBody) {
@@ -57,5 +62,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
         notificationManager.notify(notificationId /* ID of notification */, notificationBuilder.build());
+    }
+    private void vibratePhone(){
+        Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+
+        if (vibrator != null){
+            vibrator.vibrate(500);
+        }
     }
 }

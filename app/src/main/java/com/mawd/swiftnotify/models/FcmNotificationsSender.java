@@ -29,8 +29,7 @@ public class FcmNotificationsSender {
         this.mContext = mContext;
         this.mActivity = mActivity;
     }
-    public void SendNotifications() {
-
+    public void SendNotifications(boolean shouldVibrate) {
         requestQueue = Volley.newRequestQueue(mActivity);
         JSONObject mainObj = new JSONObject();
         try {
@@ -40,6 +39,10 @@ public class FcmNotificationsSender {
             notifyObject.put("body", body);
             notifyObject.put("icon", R.drawable.ic_notification);
             mainObj.put("notification", notifyObject);
+
+            if (shouldVibrate) {
+                mainObj.put("data", new JSONObject().put("vibrate", true));
+            }
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, postUrl, mainObj, response -> {
                 // code run is got response
             }, error -> {
