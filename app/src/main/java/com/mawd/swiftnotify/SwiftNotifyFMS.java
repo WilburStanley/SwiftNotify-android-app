@@ -8,13 +8,14 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Vibrator;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import java.util.Map;
 
 public class SwiftNotifyFMS extends FirebaseMessagingService {
 
@@ -25,14 +26,10 @@ public class SwiftNotifyFMS extends FirebaseMessagingService {
         if (message.getNotification() != null) {
             System.out.println("Message Notification Body: " + message.getNotification().getBody());
         }
-        sendNotification(message.getNotification().getBody());
-
-        if (message.getData().containsKey("vibrate") && Boolean.parseBoolean(message.getData().get("vibrate"))) {
-            vibratePhone();
-        }
+        sendNotification(message.getNotification().getBody(), message.getData());
     }
 
-    private void sendNotification(String messageBody) {
+    private void sendNotification(String messageBody, Map<String, String> data) {
         int notificationId = (int) System.currentTimeMillis();
         Intent intent = new Intent(this, MainPage.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -50,6 +47,11 @@ public class SwiftNotifyFMS extends FirebaseMessagingService {
                         .setSound(defaultSoundUri)
                         .setContentIntent(pendingIntent);
 
+        // Include vibrate instruction in notification data
+        if (data.containsKey("vibrate") && Boolean.parseBoolean(data.get("vibrate"))) {
+            notificationBuilder.setVibrate(new long[]{5000});
+        }
+
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -62,12 +64,5 @@ public class SwiftNotifyFMS extends FirebaseMessagingService {
         }
 
         notificationManager.notify(notificationId /* ID of notification */, notificationBuilder.build());
-    }
-    private void vibratePhone(){
-        Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-
-        if (vibrator != null){
-            vibrator.vibrate(500);
-        }
     }
 }
