@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Vibrator;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -48,7 +49,7 @@ public class SwiftNotifyFMS extends FirebaseMessagingService {
                         .setContentIntent(pendingIntent);
 
         if (data.containsKey("vibrate") && Boolean.parseBoolean(data.get("vibrate"))) {
-            notificationBuilder.setVibrate(new long[]{0, 5000});
+            vibratePhone();
         }
 
         NotificationManager notificationManager =
@@ -63,5 +64,12 @@ public class SwiftNotifyFMS extends FirebaseMessagingService {
         }
 
         notificationManager.notify(notificationId /* ID of notification */, notificationBuilder.build());
+    }
+    private void vibratePhone(){
+        Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+
+        if (vibrator != null){
+            vibrator.vibrate(500);
+        }
     }
 }
