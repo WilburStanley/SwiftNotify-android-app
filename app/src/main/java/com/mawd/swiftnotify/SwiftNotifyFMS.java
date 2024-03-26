@@ -48,7 +48,7 @@ public class SwiftNotifyFMS extends FirebaseMessagingService {
                         .setContentIntent(pendingIntent);
 
         if (data.containsKey("vibrate") && Boolean.parseBoolean(data.get("vibrate"))) {
-            notificationBuilder.setVibrate(new long[]{20000});
+            notificationBuilder.setVibrate(new long[]{0, 5000});
         }
 
         NotificationManager notificationManager =
