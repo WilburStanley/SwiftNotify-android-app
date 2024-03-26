@@ -79,23 +79,37 @@ public class ContentPage extends AppCompatActivity {
             }
         });
 
+        FetchUserData fetchUserData = new FetchUserData();
+
         barLauncher = registerForActivityResult(new ScanContract(), result -> {
             if (result.getContents() != null) {
-               /* AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Result")
-                        .setMessage(result.getContents())
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).show();*/
-                FcmNotificationsSender sender = new FcmNotificationsSender(teacherToken, "Swift Notify", result.getContents(), getApplicationContext(),  ContentPage.this);
-                sender.SendNotifications();
+                fetchUserData.fetchUserEmailAndName(new FetchUserData.FetchUserEmailAndNameCallback() {
+                    @Override
+                    public void onSuccess(String userEmail, String userName) {
+                        boolean isQrCodeValid = checkQrCodeValidity(result.getContents(), userEmail, userName);
+                        if (isQrCodeValid) {
+                            FcmNotificationsSender sender = new FcmNotificationsSender(
+                                    teacherToken, // User FCM token
+                                    result.getContents(), // Overall notification body
+                                    getApplicationContext(), // Context
+                                    ContentPage.this // Activity
+                            );
+                            sender.SendNotifications();
+                            Toast.makeText(ContentPage.this, "Successfully Notified", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(ContentPage.this, "Failed to Notify", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Exception e) {
+                        // Handle failure, such as user not logged in or data not found
+                        System.out.println("Failed to fetch user email and name: " + e.getMessage());
+                    }
+                });
+            } else {
+                Toast.makeText(this, "Failed to Notify", Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
     private void scanCode() {
         ScanOptions options = new ScanOptions();
@@ -104,5 +118,42 @@ public class ContentPage extends AppCompatActivity {
                 .setOrientationLocked(true)
                 .setCaptureActivity(CaptureAct.class);
         barLauncher.launch(options);
+    }
+    public boolean checkQrCodeValidity(String credentials, String user_account, String user_name) {
+        String[] fields = credentials.split("\n");
+
+        String account = null;
+        String name = null;
+
+        for (String field : fields) {
+            String[] parts = field.split(":");
+            if (parts.length == 2) {
+                String fieldName = parts[0].trim();
+                String fieldValue = parts[1].trim();
+
+                if (fieldName.equalsIgnoreCase("Account")) {
+                    account = fieldValue;
+                } else if (fieldName.equalsIgnoreCase("Name")) {
+                    name = fieldValue;
+                }
+            }
+        }
+        if (name != null && user_account.equalsIgnoreCase(account)) {
+            // Split the user name from the QR code credentials into individual words
+            String[] userNameParts = user_name.split(" ");
+
+            // Split the retrieved name from the database into individual words
+            String[] dbNameParts = name.split(" ");
+
+            // Check if any part of the user name matches any part of the retrieved name from the database
+            for (String userNamePart : userNameParts) {
+                for (String dbNamePart : dbNameParts) {
+                    if (userNamePart.equalsIgnoreCase(dbNamePart)) {
+                        return true; // If any part matches, return true
+                    }
+                }
+            }
+        }
+        return false; // If no match is found, return false
     }
 }

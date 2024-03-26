@@ -1,5 +1,7 @@
 package com.mawd.swiftnotify;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -58,4 +60,36 @@ public class FetchUserData {
             callback.onTeacherAvailabilityFetched(false);
         }
     }
+    public interface OnUserEmailFetchedListener {
+        void onUserEmailFetched(String userEmail);
+        void onCancelled(DatabaseError error);
+    }
+    public interface FetchUserEmailAndNameCallback {
+        void onSuccess(String userEmail, String userName);
+        void onFailure(Exception e);
+    }
+    public void fetchUserEmailAndName(FetchUserEmailAndNameCallback callback) {
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            reference.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        String userEmail = dataSnapshot.child("userEmail").getValue(String.class);
+                        String userName = dataSnapshot.child("fullName").getValue(String.class);
+                        callback.onSuccess(userEmail != null ? userEmail : "Email Unknown", userName != null ? userName : "Name Unknown");
+                    } else {
+                        callback.onFailure(new Exception("User data not found"));
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    callback.onFailure(databaseError.toException());
+                }
+            });
+        } else {
+            callback.onFailure(new Exception("User is not logged in"));
+        }
+    }
+
 }
