@@ -79,5 +79,6 @@ public class SwiftNotifyFMS extends FirebaseMessagingService {
                 vibrator.vibrate(pattern, -1);
             }
         }
+
     }
 }
