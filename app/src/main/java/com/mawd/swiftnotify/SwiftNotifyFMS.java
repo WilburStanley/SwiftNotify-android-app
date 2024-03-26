@@ -70,7 +70,7 @@ public class SwiftNotifyFMS extends FirebaseMessagingService {
 
         if (vibrator != null){
             long[] pattern = {0, 5000, 10, 5000};
-            vibrator.vibrate(pattern, 0);
+            vibrator.vibrate(pattern, -1);
         }
     }
 }
