@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.VibrationEffect;
 import android.os.Vibrator;
 
 import androidx.annotation.NonNull;
@@ -68,9 +69,16 @@ public class SwiftNotifyFMS extends FirebaseMessagingService {
     private void vibratePhone(){
         Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
-        if (vibrator != null){
-            long[] pattern = {0, 5000, 10, 5000};
-            vibrator.vibrate(pattern, -1);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(
+                    VibrationEffect.createOneShot(5000, VibrationEffect.DEFAULT_AMPLITUDE)
+            );
+        } else {
+            if (vibrator != null){
+                long[] pattern = {0, 5000, 10, 5000};
+                vibrator.vibrate(pattern, -1);
+            }
         }
     }
+
 }
