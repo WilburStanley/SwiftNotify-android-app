@@ -230,6 +230,10 @@
                     android:layout_marginTop="10dp"
                     android:spinnerMode="dialog" />
 
+                <android.widget.Space
+                    android:layout_width="match_parent"
+                    android:layout_height="210dp"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
