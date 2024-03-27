@@ -102,11 +102,13 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         verifyEmailBtn.setOnClickListener(v-> {
-            // IF EMAIL IS VERIFIED THEN DO THIS
-            registerEmail.setEnabled(false);
-            verifyEmailBtn.setVisibility(View.GONE);
-            nextStepBtn.setVisibility(View.VISIBLE);
+
         });
+
+        // IF EMAIL IS VERIFIED THEN DO THIS
+        registerEmail.setEnabled(false);
+        verifyEmailBtn.setVisibility(View.GONE);
+        nextStepBtn.setVisibility(View.VISIBLE);
 
         nextStepBtn.setOnClickListener(v-> {
             firstStepRegistration.setVisibility(View.GONE);
