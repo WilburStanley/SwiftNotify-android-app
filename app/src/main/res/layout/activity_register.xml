@@ -232,7 +232,7 @@
 
                 <android.widget.Space
                     android:layout_width="match_parent"
-                    android:layout_height="210dp"/>
+                    android:layout_height="10dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
