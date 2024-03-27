@@ -66,7 +66,8 @@ public class SwiftNotifyFMS extends FirebaseMessagingService {
 
         notificationManager.notify(notificationId /* ID of notification */, notificationBuilder.build());
     }
-    private void vibratePhone(){
+
+    private void vibratePhone() {
         Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -74,11 +75,10 @@ public class SwiftNotifyFMS extends FirebaseMessagingService {
                     VibrationEffect.createOneShot(5000, VibrationEffect.DEFAULT_AMPLITUDE)
             );
         } else {
-            if (vibrator != null){
+            if (vibrator != null) {
                 long[] pattern = {0, 5000, 10, 5000};
                 vibrator.vibrate(pattern, -1);
             }
         }
-
     }
 }

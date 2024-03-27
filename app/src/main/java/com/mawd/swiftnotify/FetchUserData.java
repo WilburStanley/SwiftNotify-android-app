@@ -18,12 +18,10 @@ public class FetchUserData {
         auth = FirebaseAuth.getInstance();
         reference = FirebaseDatabase.getInstance().getReference("users");
     }
-
     public interface FetchUserStatusCallback {
         void onSuccess(String status);
         void onFailure(Exception e);
     }
-
     public void fetchUserStatus(FetchUserStatusCallback callback) {
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser != null) {
@@ -40,11 +38,9 @@ public class FetchUserData {
             callback.onFailure(new Exception("User is not logged in"));
         }
     }
-
     public interface TeacherAvailabilityCallback {
         void onTeacherAvailabilityFetched(boolean isTeacherAvailable);
     }
-
     public void fetchTeacherAvailability(TeacherAvailabilityCallback callback) {
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser != null) {

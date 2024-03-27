@@ -82,9 +82,9 @@ public class SignInActivity extends AppCompatActivity {
             String email = logInEmail.getText().toString();
             String password = logInPassword.getText().toString();
             if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Input all fields.", Toast.LENGTH_SHORT).show();
+                showMessage("Input all fields.");
             } else if (!isValidEmail(email)) {
-                Toast.makeText(this, "Invalid email format.", Toast.LENGTH_SHORT).show();
+                showMessage("Invalid email format.");
             } else {
                 signInUser(email, password);
             }
@@ -96,12 +96,18 @@ public class SignInActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        addTokenToDatabase();
-                        startActivity(new Intent(SignInActivity.this, MainPage.class));
-                        Toast.makeText(SignInActivity.this, "Welcome.", Toast.LENGTH_SHORT).show();
+                        FirebaseUser user = auth.getCurrentUser();
+                        if (user != null && user.isEmailVerified()) {
+                            addTokenToDatabase();
+                            startActivity(new Intent(SignInActivity.this, MainPage.class));
+                            showMessage("Welcome.");
+                        } else {
+                            sendEmailVerification();
+                            showMessage("Verify your email first.");
+                        }
                     } else {
                         // If sign in fails, display a message to the user.
-                        Toast.makeText(SignInActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                        showMessage("Authentication failed.");
                     }
                 });
     }
@@ -110,7 +116,7 @@ public class SignInActivity extends AppCompatActivity {
         FirebaseUser user = auth.getCurrentUser();
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
-                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+                showMessage("Error");
                 return;
             }
             String token = task.getResult();
@@ -126,16 +132,22 @@ public class SignInActivity extends AppCompatActivity {
                     });
         });
     }
-    /*private void sendEmailVerification() {
-        FirebaseUser user = auth.getCurrentUser();
 
+    private void sendEmailVerification() {
+        FirebaseUser user = auth.getCurrentUser();
         if (user != null) {
             user.sendEmailVerification()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            Log.d("EmailMessage", "Email sent.");
+                            showMessage("We sent you an email, please check.");
+                        } else {
+                            Log.e("Error", "Error sending the email.");
                         }
                     });
         }
-    }*/
+    }
+
+    private void showMessage(String msg) {
+        Toast.makeText(SignInActivity.this, msg, Toast.LENGTH_SHORT).show();
+    }
 }

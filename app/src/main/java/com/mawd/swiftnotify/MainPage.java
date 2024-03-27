@@ -58,7 +58,7 @@ public class MainPage extends AppCompatActivity{
     protected void onStart() {
         super.onStart();
         FirebaseUser user = auth.getCurrentUser();
-        if(user == null) {
+        if(user == null && !user.isEmailVerified()) {
             startActivity(new Intent(getApplicationContext(), SignInActivity.class));
         }
     }
