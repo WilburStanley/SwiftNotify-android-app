@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -30,10 +31,11 @@ import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
     private AppCompatImageButton go_back_btn;
-    private AppCompatButton sign_in_btn, registerAccount;
+    private AppCompatButton sign_in_btn, registerAccount, verifyEmailBtn, nextStepBtn;
     private Spinner genderSpinner, statusSpinner;
     private EditText registerFullName, registerAge, registerEmail, registerPassword, retypePassword;
     private String selectedGender, selectedStatus;
+    private LinearLayout firstStepRegistration, secondStepRegistration;
 
     //Firebase object
     private FirebaseAuth auth;
@@ -50,6 +52,10 @@ public class RegisterActivity extends AppCompatActivity {
         registerEmail = findViewById(R.id.registerEmail);
         registerPassword = findViewById(R.id.registerPassword);
         retypePassword = findViewById(R.id.retypePassword);
+        firstStepRegistration = findViewById(R.id.firstStepRegistrationLayout);
+        secondStepRegistration = findViewById(R.id.secondStepRegistrationLayout);
+        verifyEmailBtn = findViewById(R.id.verifyEmailBtn);
+        nextStepBtn = findViewById(R.id.nextStepBtn);
         auth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance().getReference();
     }
@@ -95,6 +101,17 @@ public class RegisterActivity extends AppCompatActivity {
             finish();
         });
 
+        verifyEmailBtn.setOnClickListener(v-> {
+            // IF EMAIL IS VERIFIED THEN DO THIS
+            registerEmail.setEnabled(false);
+            verifyEmailBtn.setVisibility(View.GONE);
+            nextStepBtn.setVisibility(View.VISIBLE);
+        });
+
+        nextStepBtn.setOnClickListener(v-> {
+            firstStepRegistration.setVisibility(View.GONE);
+            secondStepRegistration.setVisibility(View.VISIBLE);
+        });
 
         ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(this, R.array.gender_options, R.layout.custom_snipper_item);
         genderAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
@@ -195,5 +212,4 @@ public class RegisterActivity extends AppCompatActivity {
     private void writeUser(String userId, User user) {
         db.child("users").child(userId).setValue(user);
     }
-
 }
