@@ -31,7 +31,7 @@ import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
     private AppCompatImageButton go_back_btn;
-    private AppCompatButton sign_in_btn, registerAccount, verifyEmailBtn, nextStepBtn;
+    private AppCompatButton sign_in_btn, registerAccount, getVerifyBtn, nextStepBtn;
     private Spinner genderSpinner, statusSpinner;
     private EditText registerFullName, registerAge, registerEmail, registerPassword, retypePassword;
     private String selectedGender, selectedStatus;
@@ -54,7 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
         retypePassword = findViewById(R.id.retypePassword);
         firstStepRegistration = findViewById(R.id.firstStepRegistrationLayout);
         secondStepRegistration = findViewById(R.id.secondStepRegistrationLayout);
-        verifyEmailBtn = findViewById(R.id.verifyEmailBtn);
+        getVerifyBtn = findViewById(R.id.getVerifiedBtn);
         nextStepBtn = findViewById(R.id.nextStepBtn);
         auth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance().getReference();
@@ -101,13 +101,15 @@ public class RegisterActivity extends AppCompatActivity {
             finish();
         });
 
-        verifyEmailBtn.setOnClickListener(v-> {
+        getVerifyBtn.setOnClickListener(v-> {
 
         });
 
         // IF EMAIL IS VERIFIED THEN DO THIS
         registerEmail.setEnabled(false);
-        verifyEmailBtn.setVisibility(View.GONE);
+        registerPassword.setEnabled(false);
+        retypePassword.setEnabled(false);
+        getVerifyBtn.setVisibility(View.GONE);
         nextStepBtn.setVisibility(View.VISIBLE);
 
         nextStepBtn.setOnClickListener(v-> {

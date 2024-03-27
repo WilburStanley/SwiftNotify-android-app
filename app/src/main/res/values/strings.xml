@@ -71,6 +71,7 @@
     <string name="beep_me">Beep Me</string>
     <string name="verify_email">Verify Email</string>
     <string name="next_step">Next Step</string>
+    <string name="get_verified">Get Verified</string>
 
     <string-array name="gender_options">
         <item>Male</item>
