@@ -14,12 +14,20 @@ import android.os.Vibrator;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.mawd.swiftnotify.models.NotificationInfo;
+import com.mawd.swiftnotify.models.NotificationInfoExtractor;
 
 import java.util.Map;
 
 public class SwiftNotifyFMS extends FirebaseMessagingService {
+
+    private FirebaseAuth auth;
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage message) {
@@ -28,7 +36,10 @@ public class SwiftNotifyFMS extends FirebaseMessagingService {
         if (message.getNotification() != null) {
             System.out.println("Message Notification Body: " + message.getNotification().getBody());
         }
+        auth = FirebaseAuth.getInstance();
         sendNotification(message.getNotification().getBody(), message.getData());
+        NotificationInfo notificationInfo = NotificationInfoExtractor.extractInfoFromQR(message.getNotification().getBody());
+        addNotificationToDatabase(notificationInfo);
     }
 
     private void sendNotification(String messageBody, Map<String, String> data) {
@@ -79,6 +90,15 @@ public class SwiftNotifyFMS extends FirebaseMessagingService {
                 long[] pattern = {0, 5000, 10, 5000};
                 vibrator.vibrate(pattern, -1);
             }
+        }
+    }
+
+    private void addNotificationToDatabase(NotificationInfo notification) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("notifications");
+        String notificationKey = ref.push().getKey();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (notificationKey != null && currentUser != null) {
+            ref.child(currentUser.getUid()).child(notificationKey).setValue(notification);
         }
     }
 }
