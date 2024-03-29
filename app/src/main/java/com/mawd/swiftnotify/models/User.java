@@ -8,6 +8,7 @@ public class User {
     private String userEmail;
     private String deviceToken;
     private boolean teacherAvailable;
+    private boolean verified;
 
     public User() {
         //Default constructor
@@ -83,5 +84,13 @@ public class User {
 
     public void setDeviceToken(String deviceToken) {
         this.deviceToken = deviceToken;
+    }
+
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
     }
 }

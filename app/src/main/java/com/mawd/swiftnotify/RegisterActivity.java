@@ -52,10 +52,6 @@ public class RegisterActivity extends AppCompatActivity {
         registerEmail = findViewById(R.id.registerEmail);
         registerPassword = findViewById(R.id.registerPassword);
         retypePassword = findViewById(R.id.retypePassword);
-        firstStepRegistration = findViewById(R.id.firstStepRegistrationLayout);
-        secondStepRegistration = findViewById(R.id.secondStepRegistrationLayout);
-        getVerifyBtn = findViewById(R.id.getVerifiedBtn);
-        nextStepBtn = findViewById(R.id.nextStepBtn);
         auth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance().getReference();
     }
@@ -99,22 +95,6 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(new Intent(this, GetStarted.class));
             }
             finish();
-        });
-
-        getVerifyBtn.setOnClickListener(v-> {
-
-        });
-
-        // IF EMAIL IS VERIFIED THEN DO THIS
-        registerEmail.setEnabled(false);
-        registerPassword.setEnabled(false);
-        retypePassword.setEnabled(false);
-        getVerifyBtn.setVisibility(View.GONE);
-        nextStepBtn.setVisibility(View.VISIBLE);
-
-        nextStepBtn.setOnClickListener(v-> {
-            firstStepRegistration.setVisibility(View.GONE);
-            secondStepRegistration.setVisibility(View.VISIBLE);
         });
 
         ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(this, R.array.gender_options, R.layout.custom_snipper_item);
@@ -204,7 +184,6 @@ public class RegisterActivity extends AppCompatActivity {
                         FirebaseUser currentUser = auth.getCurrentUser();
                         assert currentUser != null;
                         writeUser(currentUser.getUid(), user);
-
                         startActivity(new Intent(RegisterActivity.this, MainPage.class));
                         Toast.makeText(RegisterActivity.this, "Welcome.", Toast.LENGTH_SHORT).show();
                     } else {

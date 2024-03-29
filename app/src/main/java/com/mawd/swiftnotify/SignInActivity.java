@@ -100,9 +100,12 @@ public class SignInActivity extends AppCompatActivity {
                         if (user != null && user.isEmailVerified()) {
                             addTokenToDatabase();
                             startActivity(new Intent(SignInActivity.this, MainPage.class));
+                            addVerify(user, true);
                             showMessage("Welcome.");
                         } else {
                             sendEmailVerification();
+                            assert user != null;
+                            addVerify(user, false);
                             showMessage("Verify your email first.");
                         }
                     } else {
@@ -146,6 +149,13 @@ public class SignInActivity extends AppCompatActivity {
                     });
         }
     }
+
+    private void addVerify(FirebaseUser user, boolean verified) {
+        HashMap<String, Object> verifyMap = new HashMap<>();
+        verifyMap.put("verified", verified);
+        reference.child(user.getUid()).updateChildren(verifyMap);
+    }
+
 
     private void showMessage(String msg) {
         Toast.makeText(SignInActivity.this, msg, Toast.LENGTH_SHORT).show();

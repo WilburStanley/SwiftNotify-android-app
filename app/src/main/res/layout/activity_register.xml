@@ -72,239 +72,193 @@
                 android:textSize="20sp"
                 android:fontFamily="@font/acme"/>
 
-            <LinearLayout
-                android:id="@+id/firstStepRegistrationLayout"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/name"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:fontFamily="@font/acme"/>
+
+            <EditText
+                android:id="@+id/registerFullName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:orientation="vertical"
-                android:visibility="visible">
+                android:layout_marginTop="5dp"
+                android:textSize="25sp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/dark_gray"
+                android:autofillHints="true"
+                android:background="@drawable/curve_gray_background"
+                android:fontFamily="@font/acme"
+                android:hint="@string/enter_your_full_name"
+                android:inputType="text"
+                android:padding="10dp"
+                />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/email"
-                    android:textColor="@color/black"
-                    android:textSize="22sp"
-                    android:fontFamily="@font/acme"/>
+            <android.widget.Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp"/>
 
-                <EditText
-                    android:id="@+id/registerEmail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:autofillHints="true"
-                    android:background="@drawable/curve_gray_background"
-                    android:fontFamily="@font/acme"
-                    android:hint="@string/enter_your_email"
-                    android:inputType="textEmailAddress"
-                    android:padding="10dp"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/dark_gray"
-                    android:textSize="25sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/age"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:fontFamily="@font/acme"/>
 
-                <android.widget.Space
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/password"
-                    android:textColor="@color/black"
-                    android:textSize="22sp"
-                    android:fontFamily="@font/acme"/>
-
-                <EditText
-                    android:id="@+id/registerPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:autofillHints="true"
-                    android:background="@drawable/curve_gray_background"
-                    android:fontFamily="@font/acme"
-                    android:hint="@string/enter_your_password"
-                    android:inputType="textPassword"
-                    android:padding="10dp"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/dark_gray"
-                    android:textSize="25sp" />
-
-                <android.widget.Space
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/re_type_password"
-                    android:textColor="@color/black"
-                    android:textSize="22sp"
-                    android:fontFamily="@font/acme"/>
-
-                <EditText
-                    android:id="@+id/retypePassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:autofillHints="true"
-                    android:background="@drawable/curve_gray_background"
-                    android:fontFamily="@font/acme"
-                    android:hint="@string/enter_your_password"
-                    android:inputType="textPassword"
-                    android:padding="10dp"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/dark_gray"
-                    android:textSize="25sp" />
-
-                <android.widget.Space
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"/>
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/getVerifiedBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/curve_black_background"
-                    android:fontFamily="@font/acme"
-                    android:padding="15dp"
-                    android:text="@string/get_verified"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="25sp"
-                    android:visibility="visible"/>
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/nextStepBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/curve_black_background"
-                    android:fontFamily="@font/acme"
-                    android:padding="15dp"
-                    android:text="@string/next_step"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="25sp"
-                    android:visibility="gone"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/secondStepRegistrationLayout"
+            <EditText
+                android:id="@+id/registerAge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:layout_marginTop="5dp"
+                android:textSize="25sp"
+                android:maxLength="2"
+                android:textColor="@color/black"
+                android:textColorHint="@color/dark_gray"
+                android:hint="@string/enter_your_age"
+                android:padding="10dp"
+                android:fontFamily="@font/acme"
+                android:background="@drawable/curve_gray_background"
+                android:autofillHints="true"
+                android:inputType="text" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/name"
-                    android:textColor="@color/black"
-                    android:textSize="22sp"
-                    android:fontFamily="@font/acme"/>
+            <android.widget.Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp"/>
 
-                <EditText
-                    android:id="@+id/registerFullName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:autofillHints="true"
-                    android:background="@drawable/curve_gray_background"
-                    android:fontFamily="@font/acme"
-                    android:hint="@string/enter_your_full_name"
-                    android:inputType="text"
-                    android:padding="10dp"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/dark_gray"
-                    android:textSize="25sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/gender"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:fontFamily="@font/acme"/>
 
-                <android.widget.Space
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"/>
+            <Spinner
+                android:id="@+id/gender_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:spinnerMode="dialog" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/age"
-                    android:textColor="@color/black"
-                    android:textSize="22sp"
-                    android:fontFamily="@font/acme"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/select_status"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:fontFamily="@font/acme"/>
 
-                <EditText
-                    android:id="@+id/registerAge"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:autofillHints="true"
-                    android:background="@drawable/curve_gray_background"
-                    android:fontFamily="@font/acme"
-                    android:hint="@string/enter_your_age"
-                    android:inputType="number"
-                    android:maxLength="2"
-                    android:padding="10dp"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/dark_gray"
-                    android:textSize="25sp" />
+            <Spinner
+                android:id="@+id/status_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:spinnerMode="dialog" />
 
-                <android.widget.Space
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"/>
+            <android.widget.Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/gender"
-                    android:textColor="@color/black"
-                    android:textSize="22sp"
-                    android:fontFamily="@font/acme"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/email"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:fontFamily="@font/acme"/>
 
-                <Spinner
-                    android:id="@+id/gender_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:spinnerMode="dialog" />
+            <EditText
+                android:id="@+id/registerEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textSize="25sp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/dark_gray"
+                android:fontFamily="@font/acme"
+                android:hint="@string/enter_your_email"
+                android:padding="10dp"
+                android:background="@drawable/curve_gray_background"
+                android:autofillHints="true"
+                android:inputType="textEmailAddress" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/select_status"
-                    android:textColor="@color/black"
-                    android:textSize="22sp"
-                    android:fontFamily="@font/acme"/>
 
-                <Spinner
-                    android:id="@+id/status_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:spinnerMode="dialog" />
+            <android.widget.Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp"/>
 
-                <android.widget.Space
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/password"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:fontFamily="@font/acme"/>
 
-                <android.widget.Space
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"/>
+            <EditText
+                android:id="@+id/registerPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textSize="25sp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/dark_gray"
+                android:hint="@string/enter_your_password"
+                android:padding="10dp"
+                android:fontFamily="@font/acme"
+                android:background="@drawable/curve_gray_background"
+                android:autofillHints="true"
+                android:inputType="textPassword" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/registerAccount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/curve_black_background"
-                    android:fontFamily="@font/acme"
-                    android:padding="15dp"
-                    android:text="@string/register"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="25sp" />
+            <android.widget.Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
 
-            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/re_type_password"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:fontFamily="@font/acme"/>
+
+            <EditText
+                android:id="@+id/retypePassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textSize="25sp"
+                android:autofillHints="true"
+                android:background="@drawable/curve_gray_background"
+                android:fontFamily="@font/acme"
+                android:hint="@string/enter_your_password"
+                android:inputType="textPassword"
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/dark_gray"
+                 />
+
+            <android.widget.Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/registerAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/register"
+                android:textAllCaps="false"
+                android:textSize="25sp"
+                android:textColor="@color/white"
+                android:padding="15dp"
+                android:fontFamily="@font/acme"
+                android:background="@drawable/curve_black_background"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"

@@ -2,6 +2,7 @@ package com.mawd.swiftnotify;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,8 +25,9 @@ public class MainPage extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        auth = FirebaseAuth.getInstance();
         binding = ActivityMainPageBinding.inflate(getLayoutInflater());
+        auth = FirebaseAuth.getInstance();
+        verifyEmail();
         EdgeToEdge.enable(this);
         setContentView(binding.getRoot());
         replaceFragment(new HomeFragment());
@@ -54,12 +56,18 @@ public class MainPage extends AppCompatActivity{
         fragmentTransaction.commit();
     }
 
+    private void verifyEmail() {
+        FirebaseUser user = auth.getCurrentUser();
+        if(user != null && !user.isEmailVerified()) {
+            startActivity(new Intent(getApplicationContext(), SignInActivity.class));
+            Toast.makeText(this, "Verify your email first", Toast.LENGTH_SHORT).show();
+            FirebaseAuth.getInstance().signOut();
+        }
+    }
+
+
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser user = auth.getCurrentUser();
-        if(user == null && !user.isEmailVerified()) {
-            startActivity(new Intent(getApplicationContext(), SignInActivity.class));
-        }
     }
 }
