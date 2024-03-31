@@ -24,6 +24,7 @@ import com.mawd.swiftnotify.models.NotificationInfo;
 import com.mawd.swiftnotify.models.NotificationInfoExtractor;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class SwiftNotifyFMS extends FirebaseMessagingService {
 
@@ -38,7 +39,7 @@ public class SwiftNotifyFMS extends FirebaseMessagingService {
         }
         auth = FirebaseAuth.getInstance();
         sendNotification(message.getNotification().getBody(), message.getData());
-        NotificationInfo notificationInfo = NotificationInfoExtractor.extractInfoFromQR(message.getNotification().getBody());
+        NotificationInfo notificationInfo = NotificationInfoExtractor.extractInfoFromQR(Objects.requireNonNull(message.getNotification().getBody()));
         addNotificationToDatabase(notificationInfo);
     }
 

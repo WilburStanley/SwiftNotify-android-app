@@ -46,7 +46,7 @@ public class FetchUserData {
         if (currentUser != null) {
             reference.child(currentUser.getUid()).child("teacherAvailable").get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    boolean isTeacherAvailable = task.getResult().getValue(Boolean.class);
+                    boolean isTeacherAvailable = Boolean.TRUE.equals(task.getResult().getValue(Boolean.class));
                     callback.onTeacherAvailabilityFetched(isTeacherAvailable);
                 } else {
                     callback.onTeacherAvailabilityFetched(false);
@@ -56,10 +56,7 @@ public class FetchUserData {
             callback.onTeacherAvailabilityFetched(false);
         }
     }
-    public interface OnUserEmailFetchedListener {
-        void onUserEmailFetched(String userEmail);
-        void onCancelled(DatabaseError error);
-    }
+
     public interface FetchUserEmailAndNameCallback {
         void onSuccess(String userEmail, String userName);
         void onFailure(Exception e);

@@ -2,30 +2,36 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HistoryFragment">
+    tools:context=".HistoryFragment"
+    android:background="@color/gold">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/titleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_margin="30dp"
-        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:text="@string/logs"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:fontFamily="@font/acme"
+        android:textAlignment="textStart"
         android:paddingHorizontal="20dp"
         android:paddingVertical="10dp"
-        android:background="@drawable/curve_gray_background">
+        android:background="@drawable/curve_gray_background"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/logs"
-            android:textAllCaps="true"
-            android:textColor="@color/black"
-            android:textSize="30sp"
-            android:fontFamily="@font/acme"
-            android:textAlignment="textStart"/>
-
-    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/logList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titleBar"
+        android:layout_marginTop="25dp"
+        android:layout_marginHorizontal="30dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/log_card"/>
 
 </RelativeLayout>

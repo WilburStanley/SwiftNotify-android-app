@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout
+        android:id="@+id/gender_card_preview"
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="15dp"
+        android:orientation="vertical"
+        android:background="@drawable/default_left_side_card"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="15dp"
+        android:orientation="vertical"
+        android:background="@drawable/white_right_side_card">
+
+        <TextView
+            android:id="@+id/log_time_stamp_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Time-stap"
+            android:textSize="25sp"
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:fontFamily="@font/acme"
+            android:padding="20dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -31,11 +31,10 @@ import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
     private AppCompatImageButton go_back_btn;
-    private AppCompatButton sign_in_btn, registerAccount, getVerifyBtn, nextStepBtn;
+    private AppCompatButton sign_in_btn, registerAccount;
     private Spinner genderSpinner, statusSpinner;
     private EditText registerFullName, registerAge, registerEmail, registerPassword, retypePassword;
     private String selectedGender, selectedStatus;
-    private LinearLayout firstStepRegistration, secondStepRegistration;
 
     //Firebase object
     private FirebaseAuth auth;
@@ -114,7 +113,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-
         ArrayAdapter<CharSequence> statusAdapter = ArrayAdapter.createFromResource(this, R.array.status_options, R.layout.custom_snipper_item);
         statusAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
         statusSpinner.setAdapter(statusAdapter);
@@ -155,7 +153,7 @@ public class RegisterActivity extends AppCompatActivity {
             } else {
                 User u;
                 int convertedAge = Integer.parseInt(age);
-                if (selectedStatus.equals("Teacher")) {
+                if (selectedStatus.equalsIgnoreCase("Teacher")) {
                     u = new User(fullName, convertedAge, selectedGender, selectedStatus, email, true);
                 } else {
                     u = new User(fullName, convertedAge, selectedGender, selectedStatus, email);
