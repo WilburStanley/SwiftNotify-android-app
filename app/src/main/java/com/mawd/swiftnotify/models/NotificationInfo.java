@@ -63,7 +63,7 @@ public class NotificationInfo {
     }
 
     public void setAccount(String account) {
-        account = account;
+        this.account = account;
     }
 
     public String getTimeStamp() {

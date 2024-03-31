@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -41,6 +40,12 @@ public class SwiftNotifyFMS extends FirebaseMessagingService {
         sendNotification(message.getNotification().getBody(), message.getData());
         NotificationInfo notificationInfo = NotificationInfoExtractor.extractInfoFromQR(Objects.requireNonNull(message.getNotification().getBody()));
         addNotificationToDatabase(notificationInfo);
+    }
+
+    @Override
+    public void onNewToken(@NonNull String token) {
+        super.onNewToken(token);
+
     }
 
     private void sendNotification(String messageBody, Map<String, String> data) {
@@ -97,9 +102,20 @@ public class SwiftNotifyFMS extends FirebaseMessagingService {
     private void addNotificationToDatabase(NotificationInfo notification) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("notifications");
         String notificationKey = ref.push().getKey();
-        FirebaseUser currentUser = auth.getCurrentUser();
-        if (notificationKey != null && currentUser != null) {
-            ref.child(currentUser.getUid()).child(notificationKey).setValue(notification);
-        }
+        FetchUserData fetchUserData = new FetchUserData();
+        fetchUserData.fetchFullName(new FetchUserData.FetchEmailCallback() {
+            @Override
+            public void onSuccess(String fullName) {
+                if (notificationKey != null) {
+                    ref.child(fullName).child(notificationKey).setValue(notification);
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                e.printStackTrace();
+            }
+        });
+
     }
 }

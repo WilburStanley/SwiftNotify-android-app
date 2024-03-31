@@ -18,10 +18,13 @@ public class FetchUserData {
         auth = FirebaseAuth.getInstance();
         reference = FirebaseDatabase.getInstance().getReference("users");
     }
+
     public interface FetchUserStatusCallback {
         void onSuccess(String status);
+
         void onFailure(Exception e);
     }
+
     public void fetchUserStatus(FetchUserStatusCallback callback) {
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser != null) {
@@ -38,9 +41,11 @@ public class FetchUserData {
             callback.onFailure(new Exception("User is not logged in"));
         }
     }
+
     public interface TeacherAvailabilityCallback {
         void onTeacherAvailabilityFetched(boolean isTeacherAvailable);
     }
+
     public void fetchTeacherAvailability(TeacherAvailabilityCallback callback) {
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser != null) {
@@ -59,8 +64,10 @@ public class FetchUserData {
 
     public interface FetchUserEmailAndNameCallback {
         void onSuccess(String userEmail, String userName);
+
         void onFailure(Exception e);
     }
+
     public void fetchUserEmailAndName(FetchUserEmailAndNameCallback callback) {
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser != null) {
@@ -75,6 +82,7 @@ public class FetchUserData {
                         callback.onFailure(new Exception("User data not found"));
                     }
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                     callback.onFailure(databaseError.toException());
@@ -85,4 +93,33 @@ public class FetchUserData {
         }
     }
 
+    public interface FetchEmailCallback {
+        void onSuccess(String fullName);
+
+        void onFailure(Exception e);
+    }
+
+    public void fetchFullName(FetchEmailCallback callback) {
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            reference.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        String fullName = snapshot.child("fullName").getValue(String.class);
+                        callback.onSuccess(fullName);
+                    } else {
+                        callback.onFailure(new Exception("User data not found"));
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    callback.onFailure(error.toException());
+                }
+            });
+        } else {
+            callback.onFailure(new Exception("User is not logged in"));
+        }
+    }
 }

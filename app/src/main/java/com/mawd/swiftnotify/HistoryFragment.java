@@ -1,16 +1,15 @@
 package com.mawd.swiftnotify;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,6 +36,7 @@ public class HistoryFragment extends Fragment {
     public HistoryFragment() {
         // Required empty public constructor
     }
+
     public static HistoryFragment newInstance(String param1, String param2) {
         HistoryFragment fragment = new HistoryFragment();
         Bundle args = new Bundle();
@@ -45,6 +45,7 @@ public class HistoryFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,10 +54,11 @@ public class HistoryFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_history, container, false);
+        View view = inflater.inflate(R.layout.fragment_history, container, false);
 
         recyclerView = view.findViewById(R.id.logList);
         recyclerView.setHasFixedSize(true);
@@ -70,35 +72,54 @@ public class HistoryFragment extends Fragment {
 
         return view;
     }
+
     private void fetchNotificationData() {
         String TAG = "NotificationDebug";
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
-            DatabaseReference notificationRef = FirebaseDatabase.getInstance().getReference()
-                    .child("notifications")
-                    .child(currentUser.getUid());
-            notificationRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            FetchUserData fetchUserData = new FetchUserData();
+            fetchUserData.fetchFullName(new FetchUserData.FetchEmailCallback() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        for (DataSnapshot notificationSnapshot : dataSnapshot.getChildren()) {
-                            NotificationInfo notification = notificationSnapshot.getValue(NotificationInfo.class);
-                            if (notification != null) {
-                                logList.add(notification);
-                            }
-                        }
-                        logAdapter.notifyDataSetChanged();
-                    } else {
-                        Log.d(TAG, "No notifications found for current user");
-                    }
+                public void onSuccess(String fullName) {
+                    DatabaseReference notificationRef = FirebaseDatabase.getInstance().getReference()
+                            .child("notifications")
+                            .child(fullName);
+                    listenerForSingleValue(notificationRef);
                 }
+
                 @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.e(TAG, "Error fetching notification data: " + databaseError.getMessage());
+                public void onFailure(Exception e) {
+                    e.printStackTrace();
                 }
             });
+
         } else {
             Log.e(TAG, "Current user is null");
         }
+    }
+
+    private void listenerForSingleValue(DatabaseReference ref) {
+        String TAG = "NotificationDebug";
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot notificationSnapshot : dataSnapshot.getChildren()) {
+                        NotificationInfo notification = notificationSnapshot.getValue(NotificationInfo.class);
+                        if (notification != null) {
+                            logList.add(notification);
+                        }
+                    }
+                    logAdapter.notifyDataSetChanged();
+                } else {
+                    Log.d(TAG, "No notifications found for current user");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e(TAG, "Error fetching notification data: " + databaseError.getMessage());
+            }
+        });
     }
 }
