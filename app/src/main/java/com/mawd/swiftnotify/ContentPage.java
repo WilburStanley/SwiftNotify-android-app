@@ -154,6 +154,6 @@ public class ContentPage extends AppCompatActivity {
                 }
             }
         }
-        return false; // If no match is found, return false
+        return false;
     }
 }
