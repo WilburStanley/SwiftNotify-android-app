@@ -20,6 +20,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mawd.swiftnotify.models.NotificationInfo;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 public class HistoryFragment extends Fragment {
@@ -81,10 +83,15 @@ public class HistoryFragment extends Fragment {
             fetchUserData.fetchFullName(new FetchUserData.FetchEmailCallback() {
                 @Override
                 public void onSuccess(String fullName) {
-                    DatabaseReference notificationRef = FirebaseDatabase.getInstance().getReference()
-                            .child("notifications")
-                            .child(fullName);
-                    listenerForSingleValue(notificationRef);
+                    String uniqueKey = generateUniqueKey(fullName);
+                    if (uniqueKey != null) {
+                        DatabaseReference notificationRef = FirebaseDatabase.getInstance().getReference()
+                                .child("notifications")
+                                .child(uniqueKey); // Use the unique key instead of the full name
+                        listenerForSingleValue(notificationRef);
+                    } else {
+                        Log.e(TAG, "Failed to generate a unique key for full name: " + fullName);
+                    }
                 }
 
                 @Override
@@ -121,5 +128,29 @@ public class HistoryFragment extends Fragment {
                 Log.e(TAG, "Error fetching notification data: " + databaseError.getMessage());
             }
         });
+    }
+    private String generateUniqueKey(String fullName) {
+        try {
+            // Create a SHA-256 MessageDigest
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            // Apply the digest to the full name bytes
+            byte[] hash = digest.digest(fullName.getBytes());
+            // Convert the byte array to a hexadecimal string
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                // Convert each byte to a 2-character hexadecimal representation
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+            // Return the hexadecimal string as the unique key
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            // Handle the exception or return a default value if needed
+            return null;
+        }
     }
 }
