@@ -121,4 +121,5 @@ public class FetchUserData {
             callback.onFailure(new Exception("User is not logged in"));
         }
     }
+
 }

@@ -29,12 +29,13 @@ import java.util.Objects;
 public class SwiftNotifyFMS extends FirebaseMessagingService {
 
     private FirebaseAuth auth;
+
     @Override
     public void onMessageReceived(@NonNull RemoteMessage message) {
         super.onMessageReceived(message);
         auth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = auth.getCurrentUser();
-        if(currentUser != null) {
+        if (currentUser != null) {
             sendNotification(message.getNotification().getBody(), message.getData());
             NotificationInfo notificationInfo = NotificationInfoExtractor.extractInfoFromQR(Objects.requireNonNull(message.getNotification().getBody()));
             addNotificationToDatabase(notificationInfo);
@@ -101,19 +102,11 @@ public class SwiftNotifyFMS extends FirebaseMessagingService {
     private void addNotificationToDatabase(NotificationInfo notification) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("notifications");
         String notificationKey = ref.push().getKey();
-        FetchUserData fetchUserData = new FetchUserData();
-        fetchUserData.fetchFullName(new FetchUserData.FetchEmailCallback() {
-            @Override
-            public void onSuccess(String fullName) {
-                if (notificationKey != null) {
-                    ref.child(fullName).child(notificationKey).setValue(notification);
-                }
-            }
 
-            @Override
-            public void onFailure(Exception e) {
-                e.printStackTrace();
-            }
-        });
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null && notificationKey != null) {
+            String uid = currentUser.getUid();
+            ref.child(uid).child(notificationKey).setValue(notification);
+        }
     }
 }
