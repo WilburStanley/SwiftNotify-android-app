@@ -165,10 +165,19 @@ public class ProfileFragment extends Fragment {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(getContext(), GetStarted.class));
             requireActivity().finish();
+
+            FirebaseUser user = auth.getCurrentUser();
+            if (user != null) {
+                clearDeviceToken(user.getUid());
+            }
         });
 
         username = view.findViewById(R.id.username);
         return view;
+    }
+    private void clearDeviceToken(String userId) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        reference.child("users").child(userId).child("deviceToken").removeValue();
     }
 
     interface AuthorizationCallback {
