@@ -162,14 +162,14 @@ public class ProfileFragment extends Fragment {
         AppCompatButton log_out_btn = view.findViewById(R.id.log_out_btn);
 
         log_out_btn.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(getContext(), GetStarted.class));
-            requireActivity().finish();
-
-            FirebaseUser user = auth.getCurrentUser();
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
                 clearDeviceToken(user.getUid());
             }
+
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(getContext(), GetStarted.class));
+            requireActivity().finish();
         });
 
         username = view.findViewById(R.id.username);
