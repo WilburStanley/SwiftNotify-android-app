@@ -112,7 +112,6 @@ public class FetchUserData {
                         callback.onFailure(new Exception("User data not found"));
                     }
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     callback.onFailure(error.toException());

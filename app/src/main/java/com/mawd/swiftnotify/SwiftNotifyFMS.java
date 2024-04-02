@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -28,18 +29,16 @@ import java.util.Objects;
 public class SwiftNotifyFMS extends FirebaseMessagingService {
 
     private FirebaseAuth auth;
-
     @Override
     public void onMessageReceived(@NonNull RemoteMessage message) {
         super.onMessageReceived(message);
-
-        if (message.getNotification() != null) {
-            System.out.println("Message Notification Body: " + message.getNotification().getBody());
-        }
         auth = FirebaseAuth.getInstance();
-        sendNotification(message.getNotification().getBody(), message.getData());
-        NotificationInfo notificationInfo = NotificationInfoExtractor.extractInfoFromQR(Objects.requireNonNull(message.getNotification().getBody()));
-        addNotificationToDatabase(notificationInfo);
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if(currentUser != null) {
+            sendNotification(message.getNotification().getBody(), message.getData());
+            NotificationInfo notificationInfo = NotificationInfoExtractor.extractInfoFromQR(Objects.requireNonNull(message.getNotification().getBody()));
+            addNotificationToDatabase(notificationInfo);
+        }
     }
 
     @Override
@@ -116,6 +115,5 @@ public class SwiftNotifyFMS extends FirebaseMessagingService {
                 e.printStackTrace();
             }
         });
-
     }
 }

@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
@@ -16,8 +17,11 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.HashMap;
@@ -123,16 +127,7 @@ public class SignInActivity extends AppCompatActivity {
                 return;
             }
             String token = task.getResult();
-            HashMap<String, Object> tokenMap = new HashMap<>();
-            tokenMap.put("deviceToken", token);
-            reference.child(user.getUid()).updateChildren(tokenMap)
-                    .addOnCompleteListener(task2 -> {
-                        if (task2.isSuccessful()) {
-                            Log.d("Success", "Token added successfully");
-                        } else {
-                            Log.d("Failed", "Failed to add token: " + task2.getException().getMessage());
-                        }
-                    });
+            checkExistingToken(token, reference, user);
         });
     }
 
@@ -156,8 +151,35 @@ public class SignInActivity extends AppCompatActivity {
         reference.child(user.getUid()).updateChildren(verifyMap);
     }
 
-
     private void showMessage(String msg) {
         Toast.makeText(SignInActivity.this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void checkExistingToken(String token, DatabaseReference ref, FirebaseUser user) {
+        String path = "deviceToken";
+        ref.orderByChild(path).equalTo(token).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    HashMap<String, Object> tokenMap = new HashMap<>();
+                    tokenMap.put(path, token);
+                    reference.child(user.getUid()).updateChildren(tokenMap)
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    Log.d("Success", "Token added successfully.");
+                                } else {
+                                    Log.d("Failed", "Failed to add token: " + task.getException().getMessage());
+                                }
+                            });
+                } else {
+                    Log.d("Info", "Token already exists in the database");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("Error", "Database query cancelled");
+            }
+        });
     }
 }
