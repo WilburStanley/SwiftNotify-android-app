@@ -30,11 +30,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+import java.util.Objects;
+
 public class ProfileFragment extends Fragment {
     private AppCompatButton settingsBtn, personalDetailsBtn, changeUserEmailBtn;
     private TextView username;
     private EditText inputted_current_email, inputted_new_email, inputted_current_password, inputted_new_password;
-    private DatabaseReference reference;
+    private DatabaseReference databaseReference;
     private FirebaseAuth auth;
     private AlertDialog dialog;
     private LinearLayout change_credentials_settings, changeEmailContainer, changePasswordContainer;
@@ -162,6 +165,7 @@ public class ProfileFragment extends Fragment {
         AppCompatButton log_out_btn = view.findViewById(R.id.log_out_btn);
 
         log_out_btn.setOnClickListener(v -> {
+            updateTeacherAvailability(false);
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
                 clearDeviceToken(user.getUid());
@@ -188,7 +192,7 @@ public class ProfileFragment extends Fragment {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.authorization_check_dialog, null);
 
         EditText inputted_password = dialogView.findViewById(R.id.inputted_password);
@@ -211,7 +215,8 @@ public class ProfileFragment extends Fragment {
                 Toast.makeText(getContext(), "Password cannot be empty", Toast.LENGTH_SHORT).show();
                 return;
             }
-            AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), inputted_password_value);
+            assert user != null;
+            AuthCredential credential = EmailAuthProvider.getCredential(Objects.requireNonNull(user.getEmail()), inputted_password_value);
 
             user.reauthenticate(credential)
                     .addOnCompleteListener(task -> {
@@ -253,8 +258,9 @@ public class ProfileFragment extends Fragment {
                             inputted_current_email.setText("");
                             inputted_new_email.setText("");
                         } else {
-                            String errorMessage = task.getException().getMessage();
+                            String errorMessage = Objects.requireNonNull(task.getException()).getMessage();
                             Toast.makeText(getContext(), "Failed to update email: " + errorMessage, Toast.LENGTH_SHORT).show();
+                            assert errorMessage != null;
                             Log.d("UPDATE_FAILED_MSG", errorMessage);
                         }
                     });
@@ -265,8 +271,9 @@ public class ProfileFragment extends Fragment {
 
     private void setCurrentUsername() {
         FirebaseUser currentUser = auth.getCurrentUser();
-        reference = FirebaseDatabase.getInstance().getReference("users");
-        reference.child(currentUser.getUid()).get().addOnCompleteListener(task -> {
+        databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        assert currentUser != null;
+        databaseReference.child(currentUser.getUid()).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DataSnapshot snapshot = task.getResult();
                 String name = snapshot.exists() ? String.valueOf(snapshot.child("fullName").getValue()) : "No Name";
@@ -275,5 +282,19 @@ public class ProfileFragment extends Fragment {
                 Toast.makeText(getContext(), "Failed to read.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    private void updateTeacherAvailability(boolean teacherAvailable) {
+        FirebaseUser teacher = auth.getCurrentUser();
+        HashMap<String, Object> availabilityMap = new HashMap<>();
+        availabilityMap.put("teacherAvailable", teacherAvailable);
+        assert teacher != null;
+        databaseReference.child(teacher.getUid()).updateChildren(availabilityMap)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("Success", "Availability Updated");
+                    } else {
+                        Log.d("Failed", "Availability Failed to Update");
+                    }
+                });
     }
 }
