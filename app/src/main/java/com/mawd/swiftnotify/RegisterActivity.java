@@ -86,8 +86,10 @@ public class RegisterActivity extends AppCompatActivity {
 
             if (Objects.equals(previous_page, "SIGN_IN_PAGE")) {
                 startActivity(new Intent(this, SignInActivity.class));
+                finish();
             } else {
                 startActivity(new Intent(this, GetStarted.class));
+                finish();
             }
             finish();
         });
@@ -167,6 +169,7 @@ public class RegisterActivity extends AppCompatActivity {
         if (currentUser != null) {
             //if may current user
             startActivity(new Intent(this, MainPage.class));
+            finish();
         }
     }
 
@@ -179,6 +182,7 @@ public class RegisterActivity extends AppCompatActivity {
                         assert currentUser != null;
                         writeUser(currentUser.getUid(), user);
                         startActivity(new Intent(RegisterActivity.this, MainPage.class));
+                        finish();
                         Toast.makeText(RegisterActivity.this, "Welcome.", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(RegisterActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();

@@ -104,6 +104,7 @@ public class SignInActivity extends AppCompatActivity {
                             startActivity(new Intent(SignInActivity.this, MainPage.class));
                             addVerify(user, true);
                             showMessage("Welcome.");
+                            finish();
                         } else {
                             sendEmailVerification();
                             assert user != null;

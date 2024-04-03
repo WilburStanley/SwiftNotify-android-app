@@ -1,6 +1,5 @@
 package com.mawd.swiftnotify;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -8,7 +7,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
@@ -20,6 +18,8 @@ import androidx.core.view.WindowInsetsCompat;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.mawd.swiftnotify.models.FcmNotificationsSender;
+
+import java.util.ArrayList;
 
 public class ContentPage extends AppCompatActivity {
     AppCompatImageButton go_back_btn;
@@ -48,6 +48,7 @@ public class ContentPage extends AppCompatActivity {
 
         String teacher_name = getIntent().getStringExtra("TEACHER_NAME");
         String teacher_availability = getIntent().getStringExtra("TEACHER_AVAILABILITY");
+        String teacherGender = getIntent().getStringExtra("TEACHER_GENDER");
         String teacherToken = getIntent().getStringExtra("teacherToken");
 
         teacherName.setText(teacher_name);
@@ -69,6 +70,7 @@ public class ContentPage extends AppCompatActivity {
 
         go_back_btn.setOnClickListener(v -> {
             startActivity(new Intent(this, MainPage.class));
+            finish();
         });
 
         beepBtn.setOnClickListener(v -> {

@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Time-stap"
-            android:textSize="25sp"
+            android:textSize="22sp"
             android:textAlignment="textStart"
             android:textColor="@color/black"
             android:fontFamily="@font/acme"

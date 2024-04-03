@@ -1,5 +1,6 @@
 package com.mawd.swiftnotify;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,9 +23,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceIdReceiver;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingService;
 import com.mawd.swiftnotify.models.User;
 
 import java.util.ArrayList;
@@ -137,6 +135,7 @@ public class HomeFragment extends Fragment implements SelectListener {
         recyclerView.setAdapter(teacherAdapter);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 teacherList.clear();
@@ -172,14 +171,17 @@ public class HomeFragment extends Fragment implements SelectListener {
 
         boolean availability_value = clickedUser.isTeacherAvailable();
         intent.putExtra("TEACHER_AVAILABILITY", String.valueOf(availability_value));
+        intent.putExtra("TEACHER_GENDER", clickedUser.getUserGender());
         intent.putExtra("teacherToken", clickedUser.getDeviceToken());
         startActivity(intent);
+        requireActivity().finish();
     }
 
     private void updateTeacherAvailability(boolean teacherAvailable) {
         FirebaseUser teacher = auth.getCurrentUser();
         HashMap<String, Object> availabilityMap = new HashMap<>();
         availabilityMap.put("teacherAvailable", teacherAvailable);
+        assert teacher != null;
         databaseReference.child(teacher.getUid()).updateChildren(availabilityMap)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
