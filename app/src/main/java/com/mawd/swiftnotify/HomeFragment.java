@@ -70,6 +70,8 @@ public class HomeFragment extends Fragment implements SelectListener {
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
         auth = FirebaseAuth.getInstance();
 
+        updateTeacherAvailability(true);
+
         FetchUserData fetchUserData = new FetchUserData();
 
         TextView availabilityStatus = view.findViewById(R.id.availabilityStatus);
@@ -85,7 +87,6 @@ public class HomeFragment extends Fragment implements SelectListener {
         View affirmativeBtn = view.findViewById(R.id.affirmative_button);
         affirmativeBtn.setClickable(true);
         affirmativeBtn.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Status Changed", Toast.LENGTH_SHORT).show();
             teacherAvailable = true;
             updateTeacherAvailability(true);
             availabilityStatus.setText(teacherAvailable ? "Affirmative" : "Error");
@@ -94,7 +95,6 @@ public class HomeFragment extends Fragment implements SelectListener {
         View negativeBtn = view.findViewById(R.id.negative_button);
         negativeBtn.setClickable(true);
         negativeBtn.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Status Changed", Toast.LENGTH_SHORT).show();
             teacherAvailable = false;
             updateTeacherAvailability(false);
             availabilityStatus.setText(!teacherAvailable ? "Negative" : "Error");
