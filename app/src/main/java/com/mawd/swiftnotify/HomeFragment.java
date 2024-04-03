@@ -173,6 +173,7 @@ public class HomeFragment extends Fragment implements SelectListener {
         intent.putExtra("TEACHER_AVAILABILITY", String.valueOf(availability_value));
         intent.putExtra("TEACHER_GENDER", clickedUser.getUserGender());
         intent.putExtra("teacherToken", clickedUser.getDeviceToken());
+        intent.putExtra("PREVIOUS_LOCATION", "HOME_FRAGMENT");
         startActivity(intent);
         requireActivity().finish();
     }

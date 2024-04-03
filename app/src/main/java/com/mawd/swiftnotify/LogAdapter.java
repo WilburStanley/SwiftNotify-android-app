@@ -19,15 +19,17 @@ import java.util.ArrayList;
 public class LogAdapter extends RecyclerView.Adapter<LogAdapter.LogViewHolder> {
     Context context;
     ArrayList<NotificationInfo> list;
-    public LogAdapter(Context context, ArrayList<NotificationInfo> list) {
+    private final SelectListener selectListener;
+    public LogAdapter(Context context, ArrayList<NotificationInfo> list, SelectListener selectListener) {
         this.context = context;
         this.list = list;
+        this.selectListener = selectListener;
     }
     @NonNull
     @Override
     public LogViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.log_card, parent, false);
-        return new LogViewHolder(view);
+        return new LogViewHolder(view, selectListener);
     }
     @Override
     public void onBindViewHolder(@NonNull LogViewHolder holder, int position) {
@@ -62,11 +64,24 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.LogViewHolder> {
     public static class LogViewHolder extends RecyclerView.ViewHolder {
         TextView log_time_stamp_value;
         LinearLayout gender_card_preview;
-        public LogViewHolder(@NonNull View itemView) {
+        SelectListener selectListener;
+
+        public LogViewHolder(@NonNull View itemView, SelectListener selectListener) {
             super(itemView);
 
             log_time_stamp_value = itemView.findViewById(R.id.log_time_stamp_value);
             gender_card_preview = itemView.findViewById(R.id.gender_card_preview);
+            this.selectListener = selectListener; // Assign selectListener here
+
+            itemView.setOnClickListener(v -> {
+                if (selectListener != null){
+                    int position = getAdapterPosition();
+
+                    if (position != RecyclerView.NO_POSITION){
+                        selectListener.onItemClick(position);
+                    }
+                }
+            });
         }
     }
 }

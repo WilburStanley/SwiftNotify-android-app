@@ -72,6 +72,8 @@
     <string name="verify_email">Verify Email</string>
     <string name="next_step">Next Step</string>
     <string name="get_verified">Get Verified</string>
+    <string name="section">Section:</string>
+    <string name="account">Account:</string>
 
     <string-array name="gender_options">
         <item>Male</item>

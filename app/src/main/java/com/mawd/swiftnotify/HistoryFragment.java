@@ -1,5 +1,6 @@
 package com.mawd.swiftnotify;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,7 +25,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
-public class HistoryFragment extends Fragment {
+public class HistoryFragment extends Fragment implements SelectListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
@@ -65,7 +66,7 @@ public class HistoryFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         logList = new ArrayList<>();
-        logAdapter = new LogAdapter(getContext(), logList);
+        logAdapter = new LogAdapter(getContext(), logList, this);
         recyclerView.setAdapter(logAdapter);
         fetchNotificationData();
         return view;
@@ -119,5 +120,22 @@ public class HistoryFragment extends Fragment {
                 Log.e(TAG, "Error fetching notification data: " + databaseError.getMessage());
             }
         });
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        NotificationInfo clickedUser = logList.get(position);
+
+        Intent intent = new Intent(getContext(), ContentPage.class);
+
+        intent.putExtra("STUDENT_NAME", clickedUser.getUsername());
+        intent.putExtra("STUDENT_AGE", clickedUser.getAge());
+        intent.putExtra("STUDENT_GENDER", clickedUser.getUserGender());
+        intent.putExtra("STUDENT_SECTION", clickedUser.getUserSection());
+        intent.putExtra("STUDENT_ACCOUNT", clickedUser.getAccount());
+        intent.putExtra("PREVIOUS_LOCATION", "HISTORY_FRAGMENT");
+
+        startActivity(intent);
+        requireActivity().finish();
     }
 }

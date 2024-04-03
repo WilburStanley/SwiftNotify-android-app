@@ -48,6 +48,13 @@ public class MainPage extends AppCompatActivity{
             }
             return true;
         });
+
+        boolean navigateToHistory = getIntent().getBooleanExtra("NAVIGATE_TO_HISTORY", false);
+        if (navigateToHistory) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.frame_layout, new HistoryFragment())
+                    .commit();
+        }
     }
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
