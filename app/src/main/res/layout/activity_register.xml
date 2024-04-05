@@ -123,7 +123,7 @@
                 android:fontFamily="@font/acme"
                 android:background="@drawable/curve_gray_background"
                 android:autofillHints="true"
-                android:inputType="text" />
+                android:inputType="number" />
 
             <android.widget.Space
                 android:layout_width="match_parent"

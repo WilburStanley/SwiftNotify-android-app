@@ -1,8 +1,12 @@
 package com.mawd.swiftnotify;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
+import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -21,8 +25,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.mawd.swiftnotify.models.User;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -181,6 +194,7 @@ public class RegisterActivity extends AppCompatActivity {
                         FirebaseUser currentUser = auth.getCurrentUser();
                         assert currentUser != null;
                         writeUser(currentUser.getUid(), user);
+                        generateAndStoreQrCode(currentUser.getUid(), user);
                         startActivity(new Intent(RegisterActivity.this, MainPage.class));
                         finish();
                         Toast.makeText(RegisterActivity.this, "Welcome.", Toast.LENGTH_SHORT).show();
@@ -192,5 +206,50 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void writeUser(String userId, User user) {
         db.child("users").child(userId).setValue(user);
+    }
+    private void generateAndStoreQrCode(String userId, User user) {
+        String name = user.getFullName();
+        String age = String.valueOf(user.getAge());
+        String gender = user.getUserGender();
+        String user_account = user.getUserEmail();
+
+        String credentials = String.format("Name: %s\nAge: %s\nGender: %s\nAccount: %s", name, age, gender, user_account);
+
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        try {
+            BitMatrix bitMatrix = qrCodeWriter.encode(credentials, BarcodeFormat.QR_CODE, 800, 800);
+            Bitmap qrCodeBitmap = bitMatrixToBitmap(bitMatrix);
+
+            // Convert the Bitmap to byte array
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            qrCodeBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            byte[] imageData = baos.toByteArray();
+
+            // Convert byte array to Base64 string
+            String base64Image = Base64.encodeToString(imageData, Base64.DEFAULT);
+
+            // Save Base64 string in the database
+            db.child("users").child(userId).child("personalQrCodeImage").setValue(base64Image)
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d("Firebase", "QR code image stored successfully for user: " + userId);
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e("Firebase", "Failed to store QR code image for user: " + userId + ", error: " + e.getMessage());
+                    });
+        } catch (WriterException e) {
+            Log.e("QRCode", "Failed to generate QR code: " + e.getMessage());
+        }
+
+    }
+    private Bitmap bitMatrixToBitmap(BitMatrix bitMatrix) {
+        int width = bitMatrix.getWidth();
+        int height = bitMatrix.getHeight();
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                bitmap.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+            }
+        }
+        return bitmap;
     }
 }

@@ -54,4 +54,5 @@ dependencies {
     implementation("com.google.firebase:firebase-database")
     implementation ("com.google.firebase:firebase-messaging:9.4.0");
     implementation ("com.android.volley:volley:1.2.1");
+    implementation ("com.google.firebase:firebase-storage:20.0.0");
 }

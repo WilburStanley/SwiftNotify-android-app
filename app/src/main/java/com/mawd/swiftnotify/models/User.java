@@ -7,6 +7,8 @@ public class User {
     private String userStatus;
     private String userEmail;
     private String deviceToken;
+
+    private String personalQrCodeImage;
     private boolean teacherAvailable;
     private boolean verified;
 
@@ -92,5 +94,13 @@ public class User {
 
     public void setVerified(boolean verified) {
         this.verified = verified;
+    }
+
+    public String getPersonalQrCodeImage() {
+        return personalQrCodeImage;
+    }
+
+    public void setPersonalQrCodeImage(String personalQrCodeImage) {
+        this.personalQrCodeImage = personalQrCodeImage;
     }
 }

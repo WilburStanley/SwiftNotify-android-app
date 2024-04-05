@@ -70,8 +70,6 @@ public class HomeFragment extends Fragment implements SelectListener {
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
         auth = FirebaseAuth.getInstance();
 
-        updateTeacherAvailability(true);
-
         FetchUserData fetchUserData = new FetchUserData();
 
         TextView availabilityStatus = view.findViewById(R.id.availabilityStatus);
@@ -107,6 +105,7 @@ public class HomeFragment extends Fragment implements SelectListener {
             @Override
             public void onSuccess(String status) {
                 if (status.equals("Teacher")) {
+                    updateTeacherAvailability(true);
                     teacher_ui.setVisibility(View.VISIBLE);
                     student_ui.setVisibility(View.GONE);
                 } else if (status.equals("Student")) {
