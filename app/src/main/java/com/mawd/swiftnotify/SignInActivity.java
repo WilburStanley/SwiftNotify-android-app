@@ -2,8 +2,11 @@ package com.mawd.swiftnotify;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -31,10 +34,14 @@ public class SignInActivity extends AppCompatActivity {
     private AppCompatImageButton go_back_btn;
     private AppCompatButton login_btn, register_btn;
     private EditText logInEmail, logInPassword;
+    private ProgressBar progressBar;
 
     //Firebase objects
     private FirebaseAuth auth;
     private DatabaseReference reference;
+    private static final int TOTAL_DURATION_MS = 5000; // Total duration in milliseconds
+    private static final int NUM_INCREMENTS = 50; // Number of increments
+    private static final int PROGRESS_INCREMENT = TOTAL_DURATION_MS / NUM_INCREMENTS; // Progress increment value
 
     private void findReferences() {
         go_back_btn = findViewById(R.id.go_back_btn);
@@ -42,6 +49,7 @@ public class SignInActivity extends AppCompatActivity {
         register_btn = findViewById(R.id.register_btn);
         logInEmail = findViewById(R.id.logInEmail);
         logInPassword = findViewById(R.id.logInPassword);
+        progressBar = findViewById(R.id.progress_bar);
         auth = FirebaseAuth.getInstance();
         reference = FirebaseDatabase.getInstance().getReference().child("users");
     }
@@ -94,6 +102,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void signInUser(String email, String password) {
+        progressBar.setVisibility(View.VISIBLE);
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
@@ -115,7 +124,21 @@ public class SignInActivity extends AppCompatActivity {
                         // If sign in fails, display a message to the user.
                         showMessage("Authentication failed.");
                     }
+                    progressBar.setProgress(progressBar.getMax());
+                    progressBar.setVisibility(View.GONE);
                 });
+        new CountDownTimer(TOTAL_DURATION_MS, PROGRESS_INCREMENT) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                int progress = (int) (TOTAL_DURATION_MS - millisUntilFinished);
+                progressBar.setProgress(progress);
+            }
+
+            @Override
+            public void onFinish() {
+                // Progress bar will be set to full when the sign-in process is completed
+            }
+        }.start();
     }
 
     public void addTokenToDatabase() {
