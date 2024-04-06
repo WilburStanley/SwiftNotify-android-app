@@ -40,7 +40,6 @@ public class SwiftNotifyUtils {
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     String userStatus = userSnapshot.child("userStatus").getValue(String.class);
                     if (userStatus != null && userStatus.equalsIgnoreCase("teacher")) {
-                        // This user is a teacher, so retrieve their details and store in SQLite
                         String fullName = userSnapshot.child("fullName").getValue(String.class);
                         int age = userSnapshot.child("age").getValue(Integer.class);
                         String email = userSnapshot.child("userEmail").getValue(String.class);
