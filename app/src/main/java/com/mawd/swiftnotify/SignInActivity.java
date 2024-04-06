@@ -102,6 +102,14 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void signInUser(String email, String password) {
+
+        if (!SwiftNotifyUtils.isNetworkAvailable(this)) {
+            showMessage("No internet connection. Please check your network settings.");
+            startActivity(new Intent(this, OfflineModeUI.class));
+            finish();
+            return;
+        }
+
         progressBar.setVisibility(View.VISIBLE);
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {

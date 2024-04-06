@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OfflineModeUI"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:id="@+id/top_navigation_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="15dp"
+        android:orientation="horizontal"
+        android:background="@color/white">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/go_back_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/baseline_black_left_arrow"
+            android:scaleType="fitCenter"
+            android:background="@android:color/transparent"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/offline_mode"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="27sp"
+            android:fontFamily="@font/acme"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/top_navigation_bar"
+        android:orientation="vertical"
+        android:background="@color/gold">
+
+
+    </LinearLayout>
+
+</RelativeLayout>

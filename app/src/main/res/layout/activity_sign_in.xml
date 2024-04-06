@@ -90,7 +90,7 @@
                 android:background="@drawable/curve_gray_background"
                 android:fontFamily="@font/acme"
                 android:hint="@string/enter_your_email"
-                android:inputType="text"
+                android:inputType="textEmailAddress"
                 android:padding="10dp"
                 android:textColor="@color/black"
                 android:textColorHint="@color/dark_gray"

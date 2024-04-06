@@ -74,6 +74,7 @@
     <string name="get_verified">Get Verified</string>
     <string name="section">Section:</string>
     <string name="account">Account:</string>
+    <string name="offline_mode">Offline mode</string>
 
     <string-array name="gender_options">
         <item>Male</item>

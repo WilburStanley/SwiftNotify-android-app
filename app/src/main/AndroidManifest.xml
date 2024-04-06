@@ -8,7 +8,7 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -20,6 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SwiftNotify"
         tools:targetApi="31">
+        <activity
+            android:name=".OfflineModeUI"
+            android:exported="false" />
         <activity
             android:name=".ContentPage"
             android:exported="false" />
@@ -52,10 +55,11 @@
             android:exported="false" />
         <activity
             android:name=".GetStarted"
-            android:exported="true"/>
-        <activity android:name=".CaptureAct"
+            android:exported="true" />
+        <activity
+            android:name=".CaptureAct"
             android:stateNotNeeded="true"
-            android:theme="@style/zxing_CaptureTheme"/>
+            android:theme="@style/zxing_CaptureTheme" />
 
         <meta-data
             android:name="preloaded_fonts"
