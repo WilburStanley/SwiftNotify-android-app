@@ -5,14 +5,23 @@ import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.mawd.swiftnotify.models.User;
+
+import java.util.ArrayList;
 
 public class OfflineModeUI extends AppCompatActivity {
     AppCompatImageButton go_back_btn;
+    RecyclerView recyclerView;
+    TeacherAdapter teacherAdapter;
+    DatabaseHelper databaseHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,9 +34,22 @@ public class OfflineModeUI extends AppCompatActivity {
         });
 
         go_back_btn = findViewById(R.id.go_back_btn);
+        recyclerView = findViewById(R.id.teacherList);
 
         go_back_btn.setOnClickListener(v -> {
             startActivity(new Intent(this, SignInActivity.class));
         });
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        databaseHelper = new DatabaseHelper(this);
+
+        ArrayList<User> teachers = databaseHelper.getAllTeachers();
+
+        teacherAdapter = new TeacherAdapter(this, teachers, position -> {
+            // Handle item click if needed
+        });
+
+        recyclerView.setAdapter(teacherAdapter);
     }
 }

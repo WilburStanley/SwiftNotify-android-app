@@ -47,6 +47,44 @@
         android:orientation="vertical"
         android:background="@color/gold">
 
+        <LinearLayout
+            android:id="@+id/label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginHorizontal="30dp"
+            android:padding="20dp"
+            android:orientation="vertical"
+            android:background="@drawable/curve_gray_background">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/notify_school_s_educators"
+                android:textSize="25sp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/acme"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="A short remider before notifying educators (fix this)."
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/acme"/>
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/teacherList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_marginHorizontal="30dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/teacher_beep_card"/>
 
     </LinearLayout>
 

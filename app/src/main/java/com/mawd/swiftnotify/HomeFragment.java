@@ -157,6 +157,12 @@ public class HomeFragment extends Fragment implements SelectListener {
             }
         });
 
+        // FETCH AND STORE TEACHER'S VALUES WHILE ONLINE AND STORE IN SQLITE DB FOR OFFLINE VIEWING
+        final SwiftNotifyUtils swiftNotifyUtils = new SwiftNotifyUtils();
+        final DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
+
+        swiftNotifyUtils.fetchAndStoreTeachers(databaseHelper);
+
         return view;
     }
 

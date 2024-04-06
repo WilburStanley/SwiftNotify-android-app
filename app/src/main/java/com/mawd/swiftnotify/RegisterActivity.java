@@ -165,7 +165,7 @@ public class RegisterActivity extends AppCompatActivity {
                 User u;
                 int convertedAge = Integer.parseInt(age);
                 if (selectedStatus.equalsIgnoreCase("Teacher")) {
-                    u = new User(fullName, convertedAge, selectedGender, selectedStatus, email, true);
+                    u = new User(fullName, convertedAge, selectedGender, selectedStatus, email, true, "1234567901"); // FIX FLOW OF THE SIM
                 } else {
                     u = new User(fullName, convertedAge, selectedGender, selectedStatus, email);
                 }
