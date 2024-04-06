@@ -84,7 +84,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return teachersList;
     }
-
-
+    public void clearTeachers() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_TEACHERS, null, null);
+        db.close();
+    }
 
 }

@@ -37,6 +37,7 @@ public class SwiftNotifyUtils {
         databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                databaseHelper.clearTeachers();
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     String userStatus = userSnapshot.child("userStatus").getValue(String.class);
                     if (userStatus != null && userStatus.equalsIgnoreCase("teacher")) {
