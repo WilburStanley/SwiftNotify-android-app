@@ -67,7 +67,7 @@ public class ContentPage extends AppCompatActivity {
 
         // History fragment intent
         String student_name = getIntent().getStringExtra("STUDENT_NAME");
-        String student_age = getIntent().getStringExtra("STUDENT_AGE");
+        int student_age = getIntent().getIntExtra("STUDENT_AGE", 0);
         String student_gender = getIntent().getStringExtra("STUDENT_GENDER");
         String student_section = getIntent().getStringExtra("STUDENT_SECTION");
         String student_account = getIntent().getStringExtra("STUDENT_ACCOUNT");
@@ -87,7 +87,7 @@ public class ContentPage extends AppCompatActivity {
             beeperContainer.setVisibility(View.GONE);
 
             userName.setText(student_name);
-            studentAgeValue.setText(student_age);
+            studentAgeValue.setText(String.valueOf(student_age));
             studentGenderValue.setText(student_gender);
             studentSectionValue.setText(student_section);
             studentAccountValue.setText(student_account);
