@@ -37,14 +37,20 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherAdapter.TeacherV
         User teacher = list.get(position);
         String userStatus = teacher.getUserStatus();
 
-        if (userStatus != null && userStatus.equalsIgnoreCase("Teacher")){
-            holder.teacherFullName.setText(teacher.getFullName());
-            boolean isTeacherAvailable = teacher.isTeacherAvailable();
-            if (isTeacherAvailable) {
-                holder.isTeacherAvailable.setText(R.string.affirmative);
-            } else {
-                holder.isTeacherAvailable.setText(R.string.negative);
+        if (SwiftNotifyUtils.isNetworkAvailable(context)) {
+            // ONLINE MODE
+            if (userStatus != null && userStatus.equalsIgnoreCase("Teacher")){
+                holder.teacherFullName.setText(teacher.getFullName());
+                boolean isTeacherAvailable = teacher.isTeacherAvailable();
+                if (isTeacherAvailable) {
+                    holder.isTeacherAvailable.setText(R.string.affirmative);
+                } else {
+                    holder.isTeacherAvailable.setText(R.string.negative);
+                }
             }
+        } else {
+            // OFFLINE MODE
+            holder.teacherFullName.setText(teacher.getFullName());
         }
     }
 
