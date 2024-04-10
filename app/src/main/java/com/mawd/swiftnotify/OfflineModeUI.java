@@ -21,6 +21,7 @@ public class OfflineModeUI extends AppCompatActivity {
     RecyclerView recyclerView;
     TeacherAdapter teacherAdapter;
     DatabaseHelper databaseHelper;
+    ArrayList<User> teacherList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +46,22 @@ public class OfflineModeUI extends AppCompatActivity {
         databaseHelper = new DatabaseHelper(this);
 
         ArrayList<User> teachers = databaseHelper.getAllTeachers();
+        teacherList = new ArrayList<>(teachers);
 
         teacherAdapter = new TeacherAdapter(this, teachers, position -> {
-            // Handle item click if needed
+            User clickedUser = teacherList.get(position);
+
+            Intent intent = new Intent(this, ContentPage.class);
+
+            intent.putExtra("TEACHER_NAME", clickedUser.getFullName());
+
+            boolean availability_value = clickedUser.isTeacherAvailable();
+            intent.putExtra("TEACHER_AVAILABILITY", String.valueOf(availability_value));
+            intent.putExtra("TEACHER_GENDER", clickedUser.getUserGender());
+            intent.putExtra("teacherToken", clickedUser.getDeviceToken());
+            intent.putExtra("PREVIOUS_LOCATION", "OFFLINE_MODE");
+            startActivity(intent);
+            finish();
         });
 
         recyclerView.setAdapter(teacherAdapter);

@@ -93,6 +93,10 @@ public class ContentPage extends AppCompatActivity {
             studentGenderValue.setText(student_gender);
             studentSectionValue.setText(student_section);
             studentAccountValue.setText(student_account);
+        } else if (previousLocations.equalsIgnoreCase("OFFLINE_MODE")) {
+            userName.setText(teacher_name);
+            beeperContainer.setVisibility(View.VISIBLE);
+            studentCredentialsUi.setVisibility(View.GONE);
         }
 
         go_back_btn.setOnClickListener(v -> {
@@ -102,10 +106,11 @@ public class ContentPage extends AppCompatActivity {
                 Intent intent = new Intent(this, MainPage.class);
                 intent.putExtra("NAVIGATE_TO_HISTORY", true);
                 startActivity(intent);
+            } else if (previousLocations.equalsIgnoreCase("OFFLINE_MODE")) {
+                startActivity(new Intent(this, OfflineModeUI.class));
             }
             finish();
         });
-
 
         // Send keyword for electronic integration
         importantConcernBtn.setOnClickListener(v -> {
