@@ -24,7 +24,7 @@ import com.mawd.swiftnotify.models.FcmNotificationsSender;
 public class ContentPage extends AppCompatActivity {
     AppCompatImageButton go_back_btn;
     TextView userName, teacherAvailability, studentAgeValue, studentGenderValue, studentSectionValue, studentAccountValue;
-    AppCompatButton beepBtn;
+    AppCompatButton importantConcernBtn, normalConcernBtn, chitchatConcernBtn;
     ActivityResultLauncher<ScanOptions> barLauncher;
     LinearLayout availabilityContainer, beeperContainer, studentCredentialsUi;
     private boolean beepBtnAvailable;
@@ -49,7 +49,9 @@ public class ContentPage extends AppCompatActivity {
         beeperContainer = findViewById(R.id.beeperContainer);
         studentCredentialsUi = findViewById(R.id.studentCredentialsUi);
 
-        beepBtn = findViewById(R.id.beepBtn);
+        importantConcernBtn = findViewById(R.id.importantConcernBtn);
+        normalConcernBtn = findViewById(R.id.normalConcernBtn);
+        chitchatConcernBtn = findViewById(R.id.chitChatConcernBtn);
 
         // History fragment values
         studentAgeValue = findViewById(R.id.studentAgeValue);
@@ -104,12 +106,18 @@ public class ContentPage extends AppCompatActivity {
             finish();
         });
 
-        beepBtn.setOnClickListener(v -> {
-            if (beepBtnAvailable) {
-                scanCode();
-            } else {
-                Toast.makeText(this, "User not available", Toast.LENGTH_SHORT).show();
-            }
+
+        // Send keyword for electronic integration
+        importantConcernBtn.setOnClickListener(v -> {
+            notifyReceiver(beepBtnAvailable);
+        });
+
+        normalConcernBtn.setOnClickListener(v -> {
+            notifyReceiver(beepBtnAvailable);
+        });
+
+        chitchatConcernBtn.setOnClickListener(v -> {
+            notifyReceiver(beepBtnAvailable);
         });
 
         FetchUserData fetchUserData = new FetchUserData();
@@ -143,6 +151,13 @@ public class ContentPage extends AppCompatActivity {
                 Toast.makeText(this, "Failed to Notify", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    private void notifyReceiver(boolean beepBtnAvailable){
+        if (beepBtnAvailable) {
+            scanCode();
+        } else {
+            Toast.makeText(this, "User not available", Toast.LENGTH_SHORT).show();
+        }
     }
     private void teacherCredentialsUi(String teacher_availability) {
         int color_green = ContextCompat.getColor(this, R.color.green);

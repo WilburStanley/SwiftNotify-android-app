@@ -75,6 +75,10 @@
     <string name="section">Section:</string>
     <string name="account">Account:</string>
     <string name="offline_mode">Offline mode</string>
+    <string name="state_your_concern_by_pressing_the_button_appropriate_to_your_concern">State your concern by pressing the button appropriate to your concern:</string>
+    <string name="important">Important</string>
+    <string name="normal">Normal</string>
+    <string name="chitchat">ChitChat</string>
 
     <string-array name="gender_options">
         <item>Male</item>
