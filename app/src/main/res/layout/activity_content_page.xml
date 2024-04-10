@@ -123,11 +123,11 @@
                 android:id="@+id/beeperContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
+                android:layout_marginHorizontal="30dp"
                 android:layout_marginVertical="15dp"
                 android:orientation="vertical"
                 android:background="@drawable/curve_gray_background"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"
