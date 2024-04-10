@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
@@ -23,12 +24,11 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
@@ -36,6 +36,8 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.mawd.swiftnotify.models.User;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -162,15 +164,23 @@ public class RegisterActivity extends AppCompatActivity {
             } else if (!password.equals(retypePass)) {
                 Toast.makeText(this, "Password doesn't match.", Toast.LENGTH_SHORT).show();
             } else {
-                User u;
                 int convertedAge = Integer.parseInt(age);
                 if (selectedStatus.equalsIgnoreCase("Teacher")) {
-                    u = new User(fullName, convertedAge, selectedGender, selectedStatus, email, true, "1234567901"); // FIX FLOW OF THE SIM
+                    assignSIMNumberToTeacher(simNumber -> {
+                        if (simNumber != null) {
+                            User u = new User(fullName, convertedAge, selectedGender, selectedStatus, email, true, simNumber);
+                            registerUser(u, password);
+                            clearInputs();
+                        } else {
+                            Toast.makeText(this, "No SIM numbers available", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 } else {
-                    u = new User(fullName, convertedAge, selectedGender, selectedStatus, email);
+                    // For non-teacher users
+                    User u = new User(fullName, convertedAge, selectedGender, selectedStatus, email);
+                    registerUser(u, password);
+                    clearInputs();
                 }
-                registerUser(u, password);
-                clearInputs();
             }
         });
     }
@@ -219,16 +229,8 @@ public class RegisterActivity extends AppCompatActivity {
         try {
             BitMatrix bitMatrix = qrCodeWriter.encode(credentials, BarcodeFormat.QR_CODE, 800, 800);
             Bitmap qrCodeBitmap = bitMatrixToBitmap(bitMatrix);
+            String base64Image = bitmapToBase64(qrCodeBitmap);
 
-            // Convert the Bitmap to byte array
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            qrCodeBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-            byte[] imageData = baos.toByteArray();
-
-            // Convert byte array to Base64 string
-            String base64Image = Base64.encodeToString(imageData, Base64.DEFAULT);
-
-            // Save Base64 string in the database
             db.child("users").child(userId).child("personalQrCodeImage").setValue(base64Image)
                     .addOnSuccessListener(aVoid -> {
                         Log.d("Firebase", "QR code image stored successfully for user: " + userId);
@@ -252,4 +254,47 @@ public class RegisterActivity extends AppCompatActivity {
         }
         return bitmap;
     }
+
+    private String bitmapToBase64(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] imageData = baos.toByteArray();
+        return Base64.encodeToString(imageData, Base64.DEFAULT);
+    }
+    interface SIMNumberCallback {
+        void onSIMNumberReceived(Integer simNumber);
+    }
+    public void assignSIMNumberToTeacher(SIMNumberCallback callback) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference simNumbersRef = database.getReference("simNumber/numbers");
+
+        simNumbersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Integer> simNumbers = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Integer simNumber = snapshot.getValue(Integer.class);
+                    if (simNumber != null) {
+                        simNumbers.add(simNumber);
+                    }
+                }
+
+                if (!simNumbers.isEmpty()) {
+                    Integer firstSIMNumber = simNumbers.get(0);
+                    callback.onSIMNumberReceived(firstSIMNumber);
+                } else {
+                    Log.d("SIM", "No SIM numbers available");
+                    callback.onSIMNumberReceived(null);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("SIM", "Error fetching SIM numbers: " + databaseError.getMessage());
+                Toast.makeText(RegisterActivity.this, "Error fetching SIM numbers", Toast.LENGTH_SHORT).show();
+                callback.onSIMNumberReceived(null);
+            }
+        });
+    }
+
 }

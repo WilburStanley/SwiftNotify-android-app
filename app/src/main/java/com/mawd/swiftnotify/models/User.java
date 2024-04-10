@@ -11,16 +11,7 @@ public class User {
     private String personalQrCodeImage;
     private boolean teacherAvailable;
     private boolean verified;
-    private String simNumber;
-    private int id;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    private int simNumber;
 
     public User() {
         //Default constructor
@@ -34,7 +25,7 @@ public class User {
         this.userEmail = userEmail;
     }
 
-    public User(String fullName, int age, String userGender, String userStatus, String email, boolean teacherAvailable, String simNumber) {
+    public User(String fullName, int age, String userGender, String userStatus, String email, boolean teacherAvailable, int simNumber) {
         this.fullName = fullName;
         this.age = age;
         this.userGender = userGender;
@@ -114,11 +105,11 @@ public class User {
     public void setPersonalQrCodeImage(String personalQrCodeImage) {
         this.personalQrCodeImage = personalQrCodeImage;
     }
-    public String getSimNumber() {
+    public int getSimNumber() {
         return simNumber;
     }
 
-    public void setSimNumber(String simNumber) {
+    public void setSimNumber(int simNumber) {
         this.simNumber = simNumber;
     }
 }

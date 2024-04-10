@@ -45,7 +45,10 @@ public class SwiftNotifyUtils {
                         int age = userSnapshot.child("age").getValue(Integer.class);
                         String email = userSnapshot.child("userEmail").getValue(String.class);
                         String gender = userSnapshot.child("userGender").getValue(String.class);
-                        String simNumber = userSnapshot.child("simNumber").getValue(String.class);
+                        Integer simNumberInteger = userSnapshot.child("simNumber").getValue(Integer.class);
+
+                        // Check if simNumberInteger is not null before extracting its value
+                        int simNumber = simNumberInteger != null ? simNumberInteger : 0;
 
                         User teacher = new User();
                         teacher.setFullName(fullName);
@@ -64,4 +67,5 @@ public class SwiftNotifyUtils {
             }
         });
     }
+
 }

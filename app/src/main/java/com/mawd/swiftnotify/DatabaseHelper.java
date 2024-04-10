@@ -15,7 +15,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "teachers.db";
     private static final int DATABASE_VERSION = 1;
     private static final String TABLE_TEACHERS = "teachers";
-    private static final String COLUMN_ID = "id";
     private static final String COLUMN_AGE = "age";
     private static final String COLUMN_FULL_NAME = "fullName";
     private static final String COLUMN_TEACHER_AVAILABLE = "teacherAvailable";
@@ -24,7 +23,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_SIM_NUMBER = "simNumber";
 
     private static final String CREATE_TABLE_TEACHERS = " CREATE TABLE " + TABLE_TEACHERS + "("
-            + COLUMN_ID + " INTEGER PRIMARY KEY,"
             + COLUMN_AGE + " INTEGER,"
             + COLUMN_FULL_NAME + " TEXT,"
             + COLUMN_TEACHER_AVAILABLE + " INTEGER,"
@@ -68,13 +66,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 User teacher = new User();
-                teacher.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
                 teacher.setAge(cursor.getInt(cursor.getColumnIndex(COLUMN_AGE)));
                 teacher.setFullName(cursor.getString(cursor.getColumnIndex(COLUMN_FULL_NAME)));
                 teacher.setIsTeacherAvailable(cursor.getInt(cursor.getColumnIndex(COLUMN_TEACHER_AVAILABLE)) > 0);
                 teacher.setUserEmail(cursor.getString(cursor.getColumnIndex(COLUMN_USER_EMAIL)));
                 teacher.setUserGender(cursor.getString(cursor.getColumnIndex(COLUMN_USER_GENDER)));
-                teacher.setSimNumber(cursor.getString(cursor.getColumnIndex(COLUMN_SIM_NUMBER)));
+                teacher.setSimNumber(cursor.getInt(cursor.getColumnIndex(COLUMN_SIM_NUMBER)));
 
                 teachersList.add(teacher);
             } while (cursor.moveToNext());
