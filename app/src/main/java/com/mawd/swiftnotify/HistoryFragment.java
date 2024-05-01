@@ -24,6 +24,8 @@ import com.mawd.swiftnotify.models.NotificationInfo;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class HistoryFragment extends Fragment implements SelectListener {
     private static final String ARG_PARAM1 = "param1";
@@ -103,12 +105,16 @@ public class HistoryFragment extends Fragment implements SelectListener {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
+                    // Clear the list before adding new items
+                    logList.clear();
                     for (DataSnapshot notificationSnapshot : dataSnapshot.getChildren()) {
                         NotificationInfo notification = notificationSnapshot.getValue(NotificationInfo.class);
                         if (notification != null) {
                             logList.add(notification);
                         }
                     }
+                    // Reverse the list to display the latest item at the top
+                    Collections.reverse(logList);
                     logAdapter.notifyDataSetChanged();
                 } else {
                     Log.d(TAG, "No notifications found for current user");
@@ -121,6 +127,7 @@ public class HistoryFragment extends Fragment implements SelectListener {
             }
         });
     }
+
 
     @Override
     public void onItemClick(int position) {
