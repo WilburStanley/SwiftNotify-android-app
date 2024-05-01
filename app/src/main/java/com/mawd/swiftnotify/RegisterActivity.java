@@ -218,8 +218,10 @@ public class RegisterActivity extends AppCompatActivity {
         db.child("users").child(userId).setValue(user);
     }
     private void generateAndStoreQrCode(String userId, User user) {
-        // Use the user's UID as a unique identifier for generating the QR code
-        String credentials = String.format("Name: %s\nAge: %s\nGender: %s\nAccount: %s",
+        String TAG = "QrCode";
+
+        // Concatenate user details for uniqueness
+        String credentials = String.format("Name: %s\nAge: %s\nGender: %s\nEmail: %s",
                 user.getFullName(), user.getAge(), user.getUserGender(), user.getUserEmail());
 
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
@@ -228,18 +230,22 @@ public class RegisterActivity extends AppCompatActivity {
             Bitmap qrCodeBitmap = bitMatrixToBitmap(bitMatrix);
             String base64Image = bitmapToBase64(qrCodeBitmap);
 
-            // Store the QR code image in a node under the user's UID
+            Log.d(TAG, "QrCodeBitmap: " + qrCodeBitmap);
+            Log.d(TAG, "Base64 generated: " + base64Image);
+
+            // Store the QR code image under the user's UID node
             db.child("users").child(userId).child("personalQrCodeImage").setValue(base64Image)
                     .addOnSuccessListener(aVoid -> {
-                        Log.d("Firebase", "QR code image stored successfully for user: " + userId);
+                        Log.d(TAG, "QR code image stored successfully for user: " + userId);
                     })
                     .addOnFailureListener(e -> {
-                        Log.e("Firebase", "Failed to store QR code image for user: " + userId + ", error: " + e.getMessage());
+                        Log.e(TAG, "Failed to store QR code image for user: " + userId + ", error: " + e.getMessage());
                     });
         } catch (WriterException e) {
-            Log.e("QRCode", "Failed to generate QR code: " + e.getMessage());
+            Log.e(TAG, "Failed to generate QR code: " + e.getMessage());
         }
     }
+
 
     private Bitmap bitMatrixToBitmap(BitMatrix bitMatrix) {
         int width = bitMatrix.getWidth();
