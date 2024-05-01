@@ -218,12 +218,9 @@ public class RegisterActivity extends AppCompatActivity {
         db.child("users").child(userId).setValue(user);
     }
     private void generateAndStoreQrCode(String userId, User user) {
-        String name = user.getFullName();
-        String age = String.valueOf(user.getAge());
-        String gender = user.getUserGender();
-        String user_account = user.getUserEmail();
-
-        String credentials = String.format("Name: %s\nAge: %s\nGender: %s\nAccount: %s", name, age, gender, user_account);
+        // Use the user's UID as a unique identifier for generating the QR code
+        String credentials = String.format("Name: %s\nAge: %s\nGender: %s\nAccount: %s",
+                user.getFullName(), user.getAge(), user.getUserGender(), user.getUserEmail());
 
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         try {
@@ -231,6 +228,7 @@ public class RegisterActivity extends AppCompatActivity {
             Bitmap qrCodeBitmap = bitMatrixToBitmap(bitMatrix);
             String base64Image = bitmapToBase64(qrCodeBitmap);
 
+            // Store the QR code image in a node under the user's UID
             db.child("users").child(userId).child("personalQrCodeImage").setValue(base64Image)
                     .addOnSuccessListener(aVoid -> {
                         Log.d("Firebase", "QR code image stored successfully for user: " + userId);
@@ -241,8 +239,8 @@ public class RegisterActivity extends AppCompatActivity {
         } catch (WriterException e) {
             Log.e("QRCode", "Failed to generate QR code: " + e.getMessage());
         }
-
     }
+
     private Bitmap bitMatrixToBitmap(BitMatrix bitMatrix) {
         int width = bitMatrix.getWidth();
         int height = bitMatrix.getHeight();
