@@ -74,6 +74,9 @@ public class HomeFragment extends Fragment implements SelectListener {
 
         TextView availabilityStatus = view.findViewById(R.id.availabilityStatus);
 
+        // update teacher's availability to affirmative (Each time a teacher sign in it starts with affirmative)
+        updateTeacherAvailability(true);
+
         fetchUserData.fetchTeacherAvailability(isTeacherAvailable -> {
             if (isTeacherAvailable) {
                 availabilityStatus.setText(R.string.affirmative);
