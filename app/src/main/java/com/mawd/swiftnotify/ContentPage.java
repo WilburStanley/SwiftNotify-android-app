@@ -24,7 +24,7 @@ import com.mawd.swiftnotify.models.FcmNotificationsSender;
 public class ContentPage extends AppCompatActivity {
     AppCompatImageButton go_back_btn;
     TextView userName, teacherAvailability, studentAgeValue, studentGenderValue, studentSectionValue, studentAccountValue;
-    AppCompatButton importantConcernBtn, normalConcernBtn, chitchatConcernBtn;
+    AppCompatButton urgentConcernBtn, consultationConcernBtn, submissionConcernBtn;
     ActivityResultLauncher<ScanOptions> barLauncher;
     LinearLayout availabilityContainer, beeperContainer, studentCredentialsUi;
     private boolean beepBtnAvailable;
@@ -49,9 +49,9 @@ public class ContentPage extends AppCompatActivity {
         beeperContainer = findViewById(R.id.beeperContainer);
         studentCredentialsUi = findViewById(R.id.studentCredentialsUi);
 
-        importantConcernBtn = findViewById(R.id.importantConcernBtn);
-        normalConcernBtn = findViewById(R.id.normalConcernBtn);
-        chitchatConcernBtn = findViewById(R.id.chitChatConcernBtn);
+        urgentConcernBtn = findViewById(R.id.urgentConcernBtn);
+        consultationConcernBtn = findViewById(R.id.consulationConcernBtn);
+        submissionConcernBtn = findViewById(R.id.submissionConcernBtn);
 
         // History fragment values
         studentAgeValue = findViewById(R.id.studentAgeValue);
@@ -113,15 +113,15 @@ public class ContentPage extends AppCompatActivity {
         });
 
         // Send keyword for electronic integration
-        importantConcernBtn.setOnClickListener(v -> {
+        urgentConcernBtn.setOnClickListener(v -> {
             notifyReceiver(beepBtnAvailable);
         });
 
-        normalConcernBtn.setOnClickListener(v -> {
+        consultationConcernBtn.setOnClickListener(v -> {
             notifyReceiver(beepBtnAvailable);
         });
 
-        chitchatConcernBtn.setOnClickListener(v -> {
+        submissionConcernBtn.setOnClickListener(v -> {
             notifyReceiver(beepBtnAvailable);
         });
 

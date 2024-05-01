@@ -79,6 +79,9 @@
     <string name="important">Important</string>
     <string name="normal">Normal</string>
     <string name="chitchat">ChitChat</string>
+    <string name="urgent">Urgent</string>
+    <string name="submission">Submission</string>
+    <string name="consultation">Consultation</string>
 
     <string-array name="gender_options">
         <item>Male</item>

@@ -127,7 +127,7 @@
                 android:layout_marginVertical="15dp"
                 android:orientation="vertical"
                 android:background="@drawable/curve_gray_background"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -146,10 +146,10 @@
                     android:orientation="vertical">
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/importantConcernBtn"
+                        android:id="@+id/urgentConcernBtn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/important"
+                        android:text="@string/urgent"
                         android:textColor="@color/black"
                         android:textAllCaps="false"
                         android:textSize="25sp"
@@ -160,11 +160,11 @@
                         android:visibility="visible"/>
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/normalConcernBtn"
+                        android:id="@+id/consulationConcernBtn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
-                        android:text="@string/normal"
+                        android:text="@string/consultation"
                         android:textColor="@color/black"
                         android:textAllCaps="false"
                         android:textSize="25sp"
@@ -175,11 +175,11 @@
                         android:visibility="visible"/>
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/chitChatConcernBtn"
+                        android:id="@+id/submissionConcernBtn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="15dp"
-                        android:text="@string/chitchat"
+                        android:text="@string/submission"
                         android:textColor="@color/black"
                         android:textAllCaps="false"
                         android:textSize="25sp"
