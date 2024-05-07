@@ -55,7 +55,7 @@ public class OfflineModeUI extends AppCompatActivity {
 
             intent.putExtra("TEACHER_NAME", clickedUser.getFullName());
 
-            boolean availability_value = clickedUser.isTeacherAvailable();
+            boolean availability_value = true;
             intent.putExtra("TEACHER_AVAILABILITY", String.valueOf(availability_value));
             intent.putExtra("TEACHER_GENDER", clickedUser.getUserGender());
             intent.putExtra("teacherToken", clickedUser.getDeviceToken());

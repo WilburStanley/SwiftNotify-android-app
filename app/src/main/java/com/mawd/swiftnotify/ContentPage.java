@@ -1,7 +1,10 @@
 package com.mawd.swiftnotify;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -9,9 +12,11 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -28,6 +33,7 @@ public class ContentPage extends AppCompatActivity {
     ActivityResultLauncher<ScanOptions> barLauncher;
     LinearLayout availabilityContainer, beeperContainer, studentCredentialsUi;
     private boolean beepBtnAvailable;
+    private static final int PERMISSION_REQUEST_SEND_SMS = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +103,7 @@ public class ContentPage extends AppCompatActivity {
             userName.setText(teacher_name);
             beeperContainer.setVisibility(View.VISIBLE);
             studentCredentialsUi.setVisibility(View.GONE);
+            beepBtnAvailable = true;
         }
 
         go_back_btn.setOnClickListener(v -> {
@@ -112,18 +119,9 @@ public class ContentPage extends AppCompatActivity {
             finish();
         });
 
-        // Send keyword for electronic integration
-        urgentConcernBtn.setOnClickListener(v -> {
-            notifyReceiver(beepBtnAvailable);
-        });
-
-        consultationConcernBtn.setOnClickListener(v -> {
-            notifyReceiver(beepBtnAvailable);
-        });
-
-        submissionConcernBtn.setOnClickListener(v -> {
-            notifyReceiver(beepBtnAvailable);
-        });
+        urgentConcernBtn.setOnClickListener(v -> beepReceiver("Red on"));
+        consultationConcernBtn.setOnClickListener(v -> beepReceiver("Yellow on"));
+        submissionConcernBtn.setOnClickListener(v -> beepReceiver("Green on"));
 
         FetchUserData fetchUserData = new FetchUserData();
 
@@ -156,6 +154,42 @@ public class ContentPage extends AppCompatActivity {
                 Toast.makeText(this, "Failed to Notify", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    private void beepReceiver(String message) {
+        notifyReceiver(beepBtnAvailable);
+
+        String phoneNumber = "+639082667684";
+
+        if (ContextCompat.checkSelfPermission(ContentPage.this, android.Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted, request it from the user
+            ActivityCompat.requestPermissions(ContentPage.this, new String[]{Manifest.permission.SEND_SMS}, PERMISSION_REQUEST_SEND_SMS);
+        } else {
+            // Permission is already granted, send the SMS
+            sendSMS(phoneNumber, message);
+        }
+    }
+    private void sendSMS(String phoneNumber, String message) {
+        try {
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_SEND_SMS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, send the SMS
+                String phoneNumber = "+639082667684";
+                String message = "Default message";
+                sendSMS(phoneNumber, message);
+            } else {
+                // Permission denied, show a message or handle accordingly
+                Toast.makeText(this, "Permission denied to send SMS", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
     private void notifyReceiver(boolean beepBtnAvailable){
         if (beepBtnAvailable) {
